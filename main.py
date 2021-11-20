@@ -16,32 +16,32 @@ for i in range(1, 37):
 # board[0][2] = "X"
 # board[4][2] = "X"
 
-board = np.array([["G", "-", "I", "B", "-"],
+# board = np.array([["G", "-", "I", "B", "-"],
+#                   ["-", "-", "-", "-", "-"],
+#                   ["G", "-", "X", "-", "-"],
+#                   ["-", "-", "-", "-", "-"],
+#                   ["G", "B", "-", "-", "-"]])
+
+board = np.array([["-", "B", "I", "-", "G"],
                   ["-", "-", "-", "-", "-"],
-                  ["G", "-", "X", "-", "-"],
+                  ["-", "-", "X", "-", "G"],
                   ["-", "-", "-", "-", "-"],
-                  ["G", "B", "-", "-", "-"]])
+                  ["-", "-", "-", "B", "G"]])
 
 tempBoard = board.copy()
 
 directions = np.array(["L", "R", "U", "D"])
 
 for d in directions:
+    # tilt to the right
     if d == "R":
         stop = False
         for i in range(len(board)):
-            # loop through each row in the board
             row = board[i]
-            # loop through each entry of each row in the board
-            # the reason why I have to use row[0] is because board[i] is actually
-            # ['-' '-' 'I' 'B' 'B'] (if i is 0), which is an array of one element which is the
-            # array ['-' '-' 'I' 'B' 'B']. len(row[0]) accesses ['-' '-' 'I' 'B' 'B']
-            # and returns 5.
             index = len(row)
             blocker = index
             hole = index // 2 + 1
             for j in range(len(row) - 1, -1, -1):
-                # row[0][j] accesses each element in ['-' '-' 'I' 'B' 'B'] (j = 0).
                 elem = row[j]
                 if i == hole - 1:
                     if elem == "B" and j < hole - 1 < blocker:
@@ -49,7 +49,6 @@ for d in directions:
                         board = tempBoard
                         break
                     elif elem == "G" and (j == hole - 2 or j == hole - 3):
-                        print(j)
                         row[j] = "-"
                         continue
                 if elem == "-" and j == len(row) - 1:
@@ -63,51 +62,43 @@ for d in directions:
                         index -= 1
                     elif elem == "I":
                         blocker = j
-
             if stop == True:
                 break
+        # print(board)
 
+    # tilt to the left
     if d == "L":
         stop = False
         for i in range(len(board)):
             # loop through each row in the board
             row = board[i]
-            # loop through each entry of each row in the board
-            # the reason why I have to use row[0] is because board[i] is actually
-            # ['-' '-' 'I' 'B' 'B'] (if i is 0), which is an array of one element which is the
-            # array ['-' '-' 'I' 'B' 'B']. len(row[0]) accesses ['-' '-' 'I' 'B' 'B']
-            # and returns 5.
-            index = len(row)
+            index = -1
             blocker = index
-            hole = index // 2 + 1
-            for j in range(len(row) - 1, -1, -1):
-                # row[0][j] accesses each element in ['-' '-' 'I' 'B' 'B'] (j = 0).
+            hole = len(row) // 2 + 1
+            for j in range(len(row)):
                 elem = row[j]
                 if i == hole - 1:
-                    if elem == "B" and j < hole - 1 < blocker:
+                    if elem == "B" and j > hole - 1 > blocker:
                         stop = True
                         board = tempBoard
                         break
-                    elif elem == "G" and (j == hole - 2 or j == hole - 3):
-                        print(j)
+                    elif elem == "G" and (j == len(row) or j == len(row) - 1):
                         row[j] = "-"
                         continue
-                if elem == "-" and j == len(row) - 1:
+                if elem == "-" and j == 0:
                     index = j
-                elif elem == "-" and row[j + 1] != "-":
+                elif elem == "-" and row[j - 1] != "-":
                     index = j
                 else:
-                    if (elem == "B" or elem == "G") and (blocker > index):
+                    if (elem == "B" or elem == "G") and (blocker < index):
                         row[index] = elem
                         row[j] = "-"
-                        index -= 1
+                        index += 1
                     elif elem == "I":
                         blocker = j
-
             if stop == True:
                 break
-
-print(board)
+        # print(board)
 
 # g.show('intermediate.html')
 
