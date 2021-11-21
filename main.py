@@ -34,6 +34,12 @@ board = np.array([["G", "-", "G", "-", "G"],
                   ["B", "-", "-", "-", "-"],
                   ["-", "-", "-", "-", "-"]])
 
+# board = np.array([["-", "-", "-", "-", "-"],
+#                   ["-", "-", "-", "-", "B"],
+#                   ["-", "-", "X", "-", "I"],
+#                   ["B", "-", "-", "-", "-"],
+#                   ["G", "-", "G", "-", "G"]])
+
 tempBoard = board.copy()
 
 directions = np.array(["L", "R", "U", "D"])
@@ -137,7 +143,7 @@ for d in directions:
                         blocker = j
             if stop == True:
                 break
-        # print(board)
+        print(board)
 
     # tilt up
     if d == "U":
@@ -171,7 +177,7 @@ for d in directions:
                         blocker = j
             if stop == True:
                 break
-        print(board)
+        # print(board)
 
 # g.show('intermediate.html')
 
