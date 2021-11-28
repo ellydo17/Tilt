@@ -48,7 +48,7 @@ def countGreenSliders(board):
 
 def tiltRight(board):
     # tilt to the right
-    countG = 0
+    count_Green = countGreenSliders(board)
     stop = True
 
     for i in range(len(board)):
@@ -65,7 +65,7 @@ def tiltRight(board):
                     break
                 elif elem == "G" and (j == hole - 2 or j == hole - 3):  # green node goes into the hole
                     row[j] = "-"
-                    countG += 1
+                    count_Green -= 1
                     continue
             if elem == "-" and j == len(row) - 1:
                 index = j  # last index of the row
@@ -78,19 +78,19 @@ def tiltRight(board):
                     index -= 1
                 elif elem == "I":
                     blocker = j
-            count_Green = countGreenSliders(board)
-            if countG != count_Green:
-                stop = False
-            if stop == True:
-                break
-    print(countG)
+        if count_Green != 0:
+            stop = False
+        else:
+            stop = True
+        if stop == True:
+            break
     print(count_Green)
     print(board)
     return stop
 
 def tiltLeft(board):
     # tilt to the left
-    countG = 0
+    count_Green = countGreenSliders(board)
     stop = True
 
     for i in range(len(board)):
@@ -108,7 +108,7 @@ def tiltLeft(board):
                     break
                 elif elem == "G" and (j == len(row) or j == len(row) - 1):
                     row[j] = "-"
-                    countG += 1
+                    count_Green -= 1
                     continue
             if elem == "-" and j == 0:
                 index = j
@@ -121,19 +121,19 @@ def tiltLeft(board):
                     index += 1
                 elif elem == "I":
                     blocker = j
-            count_Green = countGreenSliders(board)
-            if countG != count_Green:
-                stop = False
-            if stop == True:
-                break
-    print(countG)
+        if count_Green != 0:
+            stop = False
+        else:
+            stop = True
+        if stop == True:
+            break
     print(count_Green)
     print(board)
     return stop
 
 def tiltDown(board):
     # tilt down
-    countG = 0
+    count_Green = countGreenSliders(board)
     stop = True
 
     for i in range(len(board)):
@@ -150,7 +150,7 @@ def tiltDown(board):
                     break
                 elif elem == "G" and (j == hole - 2 or j == hole - 3):
                     column[j] = "-"
-                    countG += 1
+                    count_Green -= 1
                     continue
             if elem == "-" and j == len(column) - 1:
                 index = j
@@ -163,19 +163,20 @@ def tiltDown(board):
                     index -= 1
                 elif elem == "I":
                     blocker = j
-            count_Green = countGreenSliders(board)
-            if countG != count_Green:
-                stop = False
-            if stop == True:
-                break
-    print(countG)
+        count_Green = countGreenSliders(board)
+        if count_Green != 0:
+            stop = False
+        else:
+            stop = True
+        if stop == True:
+            break
     print(count_Green)
     print(board)
     return stop
 
 def tiltUp(board):
     # tilt up
-    countG = 0
+    count_Green = countGreenSliders(board)
     stop = True
 
     for i in range(len(board)):
@@ -193,7 +194,7 @@ def tiltUp(board):
                     break
                 elif elem == "G" and (j == len(column) or j == len(column) - 1):
                     column[j] = "-"
-                    countG += 1
+                    count_Green -= 1
                     continue
             if elem == "-" and j == 0:
                 index = j
@@ -206,12 +207,13 @@ def tiltUp(board):
                     index += 1
                 elif elem == "I":
                     blocker = j
-            count_Green = countGreenSliders(board)
-            if countG != count_Green:
-                stop = False
-            if stop == True:
-                break
-    print(countG)
+        count_Green = countGreenSliders(board)
+        if count_Green != 0:
+            stop = False
+        else:
+            stop = True
+        if stop == True:
+            break
     print(count_Green)
     print(board)
     return stop
