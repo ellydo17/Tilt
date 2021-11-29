@@ -7,20 +7,8 @@ import numpy as np
 g = Network("800px", "1100px", directed=True)
 
 
-for i in range(1, 37):
-    g.add_node(i);
-
-# board = np.array([["-", "I", "G", "-", "-"],
-#                   ["-", "-", "B", "-", "-"],
-#                   ["-", "-", "X", "B", "G"],
-#                   ["-", "-", "B", "-", "-"],
-#                   ["-", "-", "G", "-", "-"]])
-
-# board = np.array([["-", "B", "I", "-", "G"],
-#                   ["-", "-", "-", "-", "-"],
-#                   ["-", "-", "X", "-", "G"],
-#                   ["-", "-", "-", "-", "-"],
-#                   ["-", "-", "-", "B", "G"]])
+# for i in range(1, 37):
+#     g.add_node(i);
 
 board = np.array([["B", "G", "B", "-", "-"],
                   ["B", "I", "G", "-", "-"],
@@ -28,11 +16,6 @@ board = np.array([["B", "G", "B", "-", "-"],
                   ["-", "-", "-", "-", "-"],
                   ["-", "-", "-", "-", "-"]])
 
-# board = np.array([["-", "-", "-", "-", "-"],
-#                   ["-", "-", "-", "-", "B"],
-#                   ["-", "-", "X", "-", "I"],
-#                   ["B", "-", "-", "-", "-"],
-#                   ["G", "-", "G", "-", "G"]])
 
 tempBoard = board.copy()
 
@@ -84,7 +67,6 @@ def tiltRight(board):
             stop = True
         if stop == True:
             break
-    print(count_Green)
     print(board)
     return stop
 
@@ -127,7 +109,6 @@ def tiltLeft(board):
             stop = True
         if stop == True:
             break
-    print(count_Green)
     print(board)
     return stop
 
@@ -170,7 +151,6 @@ def tiltDown(board):
             stop = True
         if stop == True:
             break
-    print(count_Green)
     print(board)
     return stop
 
@@ -214,7 +194,6 @@ def tiltUp(board):
             stop = True
         if stop == True:
             break
-    print(count_Green)
     print(board)
     return stop
 
