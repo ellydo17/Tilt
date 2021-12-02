@@ -7,18 +7,18 @@ import numpy as np
 
 g = Network("800px", "1100px", directed=True)
 
-
 # for i in range(1, 37):
 #     g.add_node(i);
 
-oriBoard = np.array([["B", "G", "B", "-", "-"],
-                  ["B", "I", "G", "-", "-"],
-                  ["-", "-", "X", "-", "-"],
-                  ["-", "-", "-", "-", "-"],
-                  ["-", "-", "-", "-", "-"]])
-
+oriBoard = np.array([
+    ["G", "I", "-", "-", "-"],
+    ["-", "I", "-", "-", "-"],
+    ["-", "-", "X", "-", "-"],
+    ["-", "-", "-", "-", "-"],
+    ["-", "-", "I", "-", "-"]])
 
 tempBoard = oriBoard.copy()
+
 
 # directions = np.array(["L", "R", "U", "D"])
 
@@ -29,6 +29,7 @@ def countGreenSliders(board):
             if board[i][j] == "G":
                 count_Green += 1
     return count_Green
+
 
 def tiltRight(board):
     # tilt to the right
@@ -70,6 +71,7 @@ def tiltRight(board):
         if stop == True:
             break
     return board
+
 
 def tiltLeft(board):
     # tilt to the left
@@ -113,6 +115,7 @@ def tiltLeft(board):
             break
     return board
 
+
 def tiltDown(board):
     # tilt down
     board = board.copy()
@@ -154,6 +157,7 @@ def tiltDown(board):
         if stop == True:
             break
     return board
+
 
 def tiltUp(board):
     # tilt up
@@ -198,6 +202,7 @@ def tiltUp(board):
             break
     return board
 
+
 # def tilt():
 #     print("Enter #: 0. Quit    L. Tilt Left   R. Tilt Right    U. Tilt Up    D. Tilt Down")
 #     num = input()
@@ -221,63 +226,80 @@ def tilt(board):
     else:
         return False
 
+
 def findMoves(board, moves):
     for i in moves:
-      if np.array_equal(i, board):
-          return True
+        if np.array_equal(i, board):
+            return True
     return False
 
-def tiltRecursive(board, moves):
+def findNodeInGraph(board, moves):
+    node = 0
+    for i in moves:
+        if np.array_equal(i, board):
+            node = i
+    return str(node)
+
+def tiltRecursive(board, moves, g):
     print("Original \n", board)
     # print("Moves: \n", moves)
 
     board_Left = tiltLeft(board)
-    board_Right= tiltRight(board)
+    board_Right = tiltRight(board)
     board_Up = tiltUp(board)
     board_Down = tiltDown(board)
 
-    # print("Left \n", board_Left)
-    # print("Right \n", board_Right)
-    # print("Up \n", board_Up)
-    # print("Down \n", board_Down)
-    #make a function that compares two 2-D arrays.
-    print(not np.array_equal(board_Right, board))
-    print(not findMoves(board_Right, moves))
-    print(not tilt(board_Right))
-    if not np.array_equal(board_Left,board) and not findMoves(board_Left, moves) and not tilt(board_Left):
-        moves.append(board_Left)
-        tiltRecursive(board_Left, moves)
-        print("got out1!")
-        # g.add_node()
-    print(not np.array_equal(board_Right, board))
-    print(not findMoves(board_Right, moves))
-    print(not tilt(board_Right))
-    if not np.array_equal(board_Right,board) and not findMoves(board_Right, moves) and not tilt(board_Right):
-        moves.append(board_Right)
-        tiltRecursive(board_Right, moves)
-        print("got out2!")
-        # g.add_node()
-    print(not np.array_equal(board_Right, board))
-    print(not findMoves(board_Right, moves))
-    print(not tilt(board_Right))
-    if not np.array_equal(board_Up,board) and not findMoves(board_Up, moves) and not tilt(board_Up):
-        moves.append(board_Up)
-        tiltRecursive(board_Up, moves)
-        print("got out3!")
-        # g.add_node()
-    print(not np.array_equal(board_Right, board))
-    print(not findMoves(board_Right, moves))
-    print(not tilt(board_Right))
-    if not np.array_equal(board_Down,board) and not findMoves(board_Down, moves) and not tilt(board_Down):
-        moves.append(board_Down)
-        tiltRecursive(board_Down, moves)
-        print("got out4!")
-        # g.add_node()
+    if not np.array_equal(board_Left, board):
+        if not findMoves(board_Left, moves):
+            if not tilt(board_Left):
+                moves.append(board_Left)
+                print("L")
+                g.add_node(findNodeInGraph(board_Left, moves))
+                tiltRecursive(board_Left, moves, g)
+            elif tilt(board_Left):
+                moves.append(board_Left)
+        # elif findMoves(board_Left, moves):
+
+    if not np.array_equal(board_Right, board):
+        if not findMoves(board_Right, moves):
+            if not tilt(board_Right):
+                moves.append(board_Right)
+                print("R")
+                g.add_node(findNodeInGraph(board_Right, moves))
+                tiltRecursive(board_Right, moves, g)
+            elif tilt(board_Right):
+                moves.append(board_Right)
+        # elif findMoves(board_Right, moves):
+
+    if not np.array_equal(board_Up, board):
+        if not findMoves(board_Up, moves):
+            if not tilt(board_Up):
+                moves.append(board_Up)
+                print("U")
+                g.add_node(findNodeInGraph(board_Up, moves))
+                tiltRecursive(board_Up, moves, g)
+            elif tilt(board_Up):
+                moves.append(board_Up)
+        # elif findMoves(board_Up, moves):
+
+    if not np.array_equal(board_Down, board):
+        if not findMoves(board_Down, moves):
+            if not tilt(board_Down):
+                moves.append(board_Down)
+                print("D")
+                g.add_node(findNodeInGraph(board_Down, moves))
+                tiltRecursive(board_Down, moves, g)
+            elif tilt(board_Down):
+                moves.append(board_Down)
+        # elif findMoves(board_Down, moves):
 
 
 def main():
+    g = Network("800px", "1100px", directed=True)
     moves = [oriBoard]
-    tiltRecursive(oriBoard, moves)
+    tiltRecursive(oriBoard, moves, g)
+    g.show("tilt.html")
+
 
 if __name__ == '__main__':
     main()
