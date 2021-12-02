@@ -10,12 +10,17 @@ g = Network("800px", "1100px", directed=True)
 # for i in range(1, 37):
 #     g.add_node(i);
 
+# board = np.array([["G", "I", "-", "-", "-"],
+#                   ["-", "I", "-", "-", "-"],
+#                   ["-", "-", "X", "-", "-"],
+#                   ["-", "-", "-", "-", "-"],
+#                   ["-", "-", "I", "-", "-"]])
+
 board = np.array([["B", "G", "B", "-", "-"],
                   ["B", "I", "G", "-", "-"],
                   ["-", "-", "X", "-", "-"],
                   ["-", "-", "-", "-", "-"],
                   ["-", "-", "-", "-", "-"]])
-
 
 tempBoard = board.copy()
 
@@ -31,8 +36,9 @@ def countGreenSliders(board):
 
 def tiltRight(board):
     # tilt to the right
+    board = board.copy()
     count_Green = countGreenSliders(board)
-    stop = True
+    stop = False
 
     for i in range(len(board)):
         row = board[i]
@@ -72,8 +78,9 @@ def tiltRight(board):
 
 def tiltLeft(board):
     # tilt to the left
+    board = board.copy()
     count_Green = countGreenSliders(board)
-    stop = True
+    stop = False
 
     for i in range(len(board)):
         # loop through each row in the board
@@ -114,8 +121,9 @@ def tiltLeft(board):
 
 def tiltDown(board):
     # tilt down
+    board = board.copy()
     count_Green = countGreenSliders(board)
-    stop = True
+    stop = False
 
     for i in range(len(board)):
         column = board[:, i]
@@ -156,8 +164,9 @@ def tiltDown(board):
 
 def tiltUp(board):
     # tilt up
+    board = board.copy()
     count_Green = countGreenSliders(board)
-    stop = True
+    stop = False
 
     for i in range(len(board)):
         # loop through each row in the board
@@ -217,4 +226,9 @@ def tilt():
             continue
     print("You won the game!")
 
-tilt()
+def main():
+    tilt()
+
+
+if __name__ == '__main__':
+    main()
