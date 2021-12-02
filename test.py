@@ -1,6 +1,7 @@
 from collections import namedtuple
 from itertools import combinations
 
+import Arrays as Arrays
 from pyvis.network import Network
 import numpy as np
 
@@ -10,14 +11,14 @@ g = Network("800px", "1100px", directed=True)
 # for i in range(1, 37):
 #     g.add_node(i);
 
-board = np.array([["B", "G", "B", "-", "-"],
+oriBoard = np.array([["B", "G", "B", "-", "-"],
                   ["B", "I", "G", "-", "-"],
                   ["-", "-", "X", "-", "-"],
                   ["-", "-", "-", "-", "-"],
                   ["-", "-", "-", "-", "-"]])
 
 
-tempBoard = board.copy()
+tempBoard = oriBoard.copy()
 
 directions = np.array(["L", "R", "U", "D"])
 
@@ -31,6 +32,7 @@ def countGreenSliders(board):
 
 def tiltRight(board):
     # tilt to the right
+    board = board.copy()
     count_Green = countGreenSliders(board)
     stop = True
 
@@ -67,11 +69,11 @@ def tiltRight(board):
             stop = True
         if stop == True:
             break
-    print(board)
-    return stop
+    return board
 
 def tiltLeft(board):
     # tilt to the left
+    board = board.copy()
     count_Green = countGreenSliders(board)
     stop = True
 
@@ -109,11 +111,11 @@ def tiltLeft(board):
             stop = True
         if stop == True:
             break
-    print(board)
-    return stop
+    return board
 
 def tiltDown(board):
     # tilt down
+    board = board.copy()
     count_Green = countGreenSliders(board)
     stop = True
 
@@ -151,11 +153,11 @@ def tiltDown(board):
             stop = True
         if stop == True:
             break
-    print(board)
-    return stop
+    return board
 
 def tiltUp(board):
     # tilt up
+    board = board.copy()
     count_Green = countGreenSliders(board)
     stop = True
 
@@ -194,27 +196,66 @@ def tiltUp(board):
             stop = True
         if stop == True:
             break
-    print(board)
-    return stop
+    return board
 
-def tilt():
-    stop = False
-    while (stop == False):
-        print("Enter #: 0. Quit    L. Tilt Left   R. Tilt Right    U. Tilt Up    D. Tilt Down")
-        num = input()
-        if num == "0":
-            print("Exiting the game...")
-        elif num == "L":
-            stop = tiltLeft(board)
-        elif num == "R":
-            stop = tiltRight(board)
-        elif num == "U":
-            stop = tiltUp(board)
-        elif num == "D":
-            stop = tiltDown(board)
-        else:
-            print("Invalid option.")
-            continue
-    print("You won the game!")
+# def tilt():
+#     print("Enter #: 0. Quit    L. Tilt Left   R. Tilt Right    U. Tilt Up    D. Tilt Down")
+#     num = input()
+#     if num == "0":
+#         print("Exiting the game...")
+#     elif num == "L":
+#         print(tiltLeft(board))
+#     elif num == "R":
+#         print(tiltRight(board))
+#     elif num == "U":
+#         print(tiltUp(board))
+#     elif num == "D":
+#         print(tiltDown(board))
+#     else:
+#         print("Invalid option.")
 
-tilt()
+def tilt(board):
+    count_Green = countGreenSliders(board)
+    if count_Green == 0:
+        return True
+    else:
+        return False
+
+def tiltRecursive(board, moves):
+    print("Original \n", board)
+    if (not tilt(board)):
+        # currentBoard = board
+
+        board_Left = tiltLeft(board)
+        board_Right= tiltRight(board)
+        board_Up = tiltUp(board)
+        board_Down = tiltDown(board)
+
+        # print("Left \n", board_Left)
+        # print("Right \n", board_Right)
+        # print("Up \n", board_Up)
+        # print("Down \n", board_Down)
+        #make a function that compares two 2-D arrays.
+        if not np.array_equal(board_Left,board) and not (board_Left in moves):
+            moves.add(board_Left)
+            tiltRecursive(board_Left)
+            # g.add_node()
+        if not np.array_equal(board_Right,board) and not (board_Right in moves):
+            moves.add(board_Right)
+            tiltRecursive(board_Right)
+            # g.add_node()
+        if not np.array_equal(board_Up,board) and not (board_Up in moves):
+            moves.add(board_Up)
+            tiltRecursive(board_Up)
+            # g.add_node()
+        if not np.array_equal(board_Down,board) and not (board_Down in moves):
+            moves.add(board_Down)
+            tiltRecursive(board_Down)
+            # g.add_node()
+
+def main():
+    moves = []
+    tiltRecursive(oriBoard, moves)
+
+if __name__ == '__main__':
+    main()
