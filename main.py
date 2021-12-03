@@ -10,17 +10,17 @@ g = Network("800px", "1100px", directed=True)
 # for i in range(1, 37):
 #     g.add_node(i);
 
-# board = np.array([["-", "-", "-", "-", "-"],
-#                       ["-", "-", "-", "-", "-"],
-#                       ["-", "-", "X", "-", "-"],
-#                       ["-", "-", "-", "-", "-"],
-#                       ["-", "B", "B", "G", "B"]])
-
-ggg = np.array([["B", "G", "G", "-", "-"],
-                      ["B", "I", "B", "-", "-"],
+ggg = np.array([["-", "-", "-", "-", "-"],
+                      ["-", "-", "-", "-", "-"],
                       ["-", "-", "X", "-", "-"],
                       ["-", "-", "-", "-", "-"],
-                      ["-", "-", "-", "-", "-"]])
+                      ["-", "B", "B", "G", "B"]])
+
+# ggg = np.array([["B", "G", "G", "-", "-"],
+#                       ["B", "I", "B", "-", "-"],
+#                       ["-", "-", "X", "-", "-"],
+#                       ["-", "-", "-", "-", "-"],
+#                       ["-", "-", "-", "-", "-"]])
 
 # board = np.array([["B", "G", "G", "-", "-"],
 #                   ["B", "I", "B", "-", "-"],
@@ -62,7 +62,6 @@ def tiltRight(board):
             elem = row[j]
             if i == hole - 1:
                 if elem == "B" and j < hole - 1 < blocker:  # blue node cannot go into the hole
-                    print("cscscssc")
                     stop = True
                     board = tempBoard
                     break
@@ -91,8 +90,8 @@ def tiltRight(board):
             checking = False
             break
 
-    if checking == False:
-        board = tempBoard
+    # if checking == False:
+    #     board = tempBoard
 
     print(board)
     return stop, board, stop_temp
@@ -142,8 +141,8 @@ def tiltLeft(board):
             checking = False
             break
 
-    if checking == False:
-        board = tempBoard
+    # if checking == False:
+    #     board = tempBoard
 
     print(board)
     return stop, board, stop_temp
@@ -194,8 +193,8 @@ def tiltDown(board):
             checking = False
             break
 
-    if checking == False:
-        board = tempBoard
+    # if checking == False:
+    #     board = tempBoard
     print(board)
     return stop, board, stop_temp
 
@@ -245,17 +244,17 @@ def tiltUp(board):
             checking = False
             break
 
-    if checking == False:
-        board = tempBoard
+    # if checking == False:
+    #     board = tempBoard
     print(board)
     return stop, board, stop_temp
 
 def tilt():
-    ggg = np.array([["-", "-", "I", "B", "B"],
+    ggg = np.array([["-", "-", "-", "-", "-"],
                       ["-", "-", "-", "-", "-"],
                       ["-", "-", "X", "-", "-"],
                       ["-", "-", "-", "-", "-"],
-                      ["G", "B", "-", "-", "-"]])
+                      ["-", "B", "B", "G", "B"]])
 
     # board = np.array([["-", "-", "-", "-", "-"],
     #                      ["-", "-", "-", "-", "-"],
