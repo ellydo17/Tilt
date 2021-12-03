@@ -23,11 +23,11 @@ g = Network("800px", "1100px", directed=True)
 #                   ["-", "-", "-", "-", "-"],
 #                   ["-", "-", "-", "-", "-"]])
 
-oriBoard = np.array([["-", "-", "I", "B", "B"],
+oriBoard = np.array([["-", "-", "-", "-", "-"],
                   ["-", "-", "-", "-", "-"],
                   ["-", "-", "X", "-", "-"],
                   ["-", "-", "-", "-", "-"],
-                  ["G", "B", "-", "-", "-"]])
+                  ["-", "B", "B", "G", "B"]])
 
 tempBoard = oriBoard.copy()
 
@@ -231,7 +231,7 @@ def tiltUp(board):
 #     else:
 #         print("Invalid option.")
 
-def tilt(board):
+def green(board):
     count_Green = countGreenSliders(board)
     if count_Green == 0:
         return True
@@ -263,7 +263,7 @@ def tiltRecursive(board, moves, g):
 
     if not np.array_equal(board_Left, board):
         if not findMoves(board_Left, moves):
-            if not tilt(board_Left):
+            if not green(board_Left):
                 moves.append(board_Left)
                 print("L")
                 # add the node of the board_Left
@@ -271,7 +271,7 @@ def tiltRecursive(board, moves, g):
                 # add the edge between the board_Left and the current board
                 g.add_edge(str(board), str(board_Left), title="L")
                 tiltRecursive(board_Left, moves, g)
-            elif tilt(board_Left):
+            elif green(board_Left):
                 moves.append(board_Left)
                 # add the node of the board_Right
                 g.add_node(str(board_Left))
@@ -286,16 +286,16 @@ def tiltRecursive(board, moves, g):
 
     if not np.array_equal(board_Right, board):
         if not findMoves(board_Right, moves):
-            if not tilt(board_Right):
+            if not green(board_Right):
                 moves.append(board_Right)
                 print("R")
                 # add the node of the board_Right
                 g.add_node(str(board_Right))
                 # add the edge between the board_Right and the current board
-                g.add_edge(str(board), str(board_Left), title="R")
+                g.add_edge(str(board), str(board_Right), title="R")
                 g.add_edge(str(board), str(board_Right), title="R")
                 tiltRecursive(board_Right, moves, g)
-            elif tilt(board_Right):
+            elif green(board_Right):
                 moves.append(board_Right)
                 # add the node of the board_Right
                 g.add_node(str(board_Right))
@@ -310,7 +310,7 @@ def tiltRecursive(board, moves, g):
 
     if not np.array_equal(board_Up, board):
         if not findMoves(board_Up, moves):
-            if not tilt(board_Up):
+            if not green(board_Up):
                 moves.append(board_Up)
                 print("U")
                 # add the node of the board_Up
@@ -318,7 +318,7 @@ def tiltRecursive(board, moves, g):
                 # add the edge between the board_Up and the current board
                 g.add_edge(str(board), str(board_Up), title="U")
                 tiltRecursive(board_Up, moves, g)
-            elif tilt(board_Up):
+            elif green(board_Up):
                 moves.append(board_Up)
                 # add the node of the board_Right
                 g.add_node(str(board_Up))
@@ -333,7 +333,7 @@ def tiltRecursive(board, moves, g):
 
     if not np.array_equal(board_Down, board):
         if not findMoves(board_Down, moves):
-            if not tilt(board_Down):
+            if not green(board_Down):
                 moves.append(board_Down)
                 print("D")
                 # add the node of the board_Down
@@ -341,7 +341,7 @@ def tiltRecursive(board, moves, g):
                 # add the edge between the board_Down and the current board
                 g.add_edge(str(board), str(board_Down), title="D")
                 tiltRecursive(board_Down, moves, g)
-            elif tilt(board_Down):
+            elif green(board_Down):
                 moves.append(board_Down)
                 # add the node of the board_Right
                 g.add_node(str(board_Down))

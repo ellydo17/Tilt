@@ -10,19 +10,32 @@ g = Network("800px", "1100px", directed=True)
 # for i in range(1, 37):
 #     g.add_node(i);
 
-# board = np.array([["G", "I", "-", "-", "-"],
-#                   ["-", "I", "-", "-", "-"],
+# board = np.array([["-", "-", "-", "-", "-"],
+#                       ["-", "-", "-", "-", "-"],
+#                       ["-", "-", "X", "-", "-"],
+#                       ["-", "-", "-", "-", "-"],
+#                       ["-", "B", "B", "G", "B"]])
+
+ggg = np.array([["B", "G", "G", "-", "-"],
+                      ["B", "I", "B", "-", "-"],
+                      ["-", "-", "X", "-", "-"],
+                      ["-", "-", "-", "-", "-"],
+                      ["-", "-", "-", "-", "-"]])
+
+# board = np.array([["B", "G", "G", "-", "-"],
+#                   ["B", "I", "B", "-", "-"],
 #                   ["-", "-", "X", "-", "-"],
 #                   ["-", "-", "-", "-", "-"],
-#                   ["-", "-", "I", "-", "-"]])
+#                   ["-", "-", "-", "-", "-"]])
 
-board = np.array([["B", "G", "B", "-", "-"],
-                  ["B", "I", "G", "-", "-"],
-                  ["-", "-", "X", "-", "-"],
-                  ["-", "-", "-", "-", "-"],
-                  ["-", "-", "-", "-", "-"]])
+# board = np.array([["-", "-", "-", "G", "B"],
+#                   ["-", "I", "-", "-", "B"],
+#                   ["-", "-", "X", "-", "B"],
+#                   ["-", "-", "-", "-", "-"],
+#                   ["-", "-", "-", "-", "-"]])
 
-tempBoard = board.copy()
+
+tempBoard = ggg.copy()
 
 directions = np.array(["L", "R", "U", "D"])
 
@@ -37,9 +50,9 @@ def countGreenSliders(board):
 def tiltRight(board):
     # tilt to the right
     board = board.copy()
-    count_Green = countGreenSliders(board)
     stop = False
-
+    checking = True
+    tempBoard = board.copy()
     for i in range(len(board)):
         row = board[i]
         index = len(row)
@@ -49,6 +62,7 @@ def tiltRight(board):
             elem = row[j]
             if i == hole - 1:
                 if elem == "B" and j < hole - 1 < blocker:  # blue node cannot go into the hole
+                    print("cscscssc")
                     stop = True
                     board = tempBoard
                     break
@@ -67,20 +81,28 @@ def tiltRight(board):
                     index -= 1
                 elif elem == "I":
                     blocker = j
+        count_Green = countGreenSliders(board)
+        print(count_Green)
         if count_Green != 0:
-            stop = False
+            stop_temp = False
         else:
-            stop = True
-        if stop == True:
+            stop_temp = True
+        if stop == True or stop_temp == True:
+            checking = False
             break
+
+    if checking == False:
+        board = tempBoard
+
     print(board)
-    return stop
+    return stop, board, stop_temp
 
 def tiltLeft(board):
     # tilt to the left
     board = board.copy()
-    count_Green = countGreenSliders(board)
+    checking = True
     stop = False
+    tempBoard = board.copy()
 
     for i in range(len(board)):
         # loop through each row in the board
@@ -110,20 +132,29 @@ def tiltLeft(board):
                     index += 1
                 elif elem == "I":
                     blocker = j
+        count_Green = countGreenSliders(board)
+        print(count_Green)
         if count_Green != 0:
-            stop = False
+            stop_temp = False
         else:
-            stop = True
-        if stop == True:
+            stop_temp = True
+        if stop == True or stop_temp == True:
+            checking = False
             break
+
+    if checking == False:
+        board = tempBoard
+
     print(board)
-    return stop
+    return stop, board, stop_temp
 
 def tiltDown(board):
     # tilt down
     board = board.copy()
-    count_Green = countGreenSliders(board)
+
     stop = False
+    checking = True
+    tempBoard = board.copy()
 
     for i in range(len(board)):
         column = board[:, i]
@@ -153,20 +184,28 @@ def tiltDown(board):
                 elif elem == "I":
                     blocker = j
         count_Green = countGreenSliders(board)
+        print(count_Green)
         if count_Green != 0:
-            stop = False
+            stop_temp = False
         else:
-            stop = True
-        if stop == True:
+            stop_temp = True
+        if stop == True or stop_temp == True:
+            print(stop, stop_temp)
+            checking = False
             break
+
+    if checking == False:
+        board = tempBoard
     print(board)
-    return stop
+    return stop, board, stop_temp
 
 def tiltUp(board):
     # tilt up
     board = board.copy()
-    count_Green = countGreenSliders(board)
+
     stop = False
+    checking = True
+    tempBoard = board.copy()
 
     for i in range(len(board)):
         # loop through each row in the board
@@ -197,30 +236,54 @@ def tiltUp(board):
                 elif elem == "I":
                     blocker = j
         count_Green = countGreenSliders(board)
+        print(count_Green)
         if count_Green != 0:
-            stop = False
+            stop_temp = False
         else:
-            stop = True
-        if stop == True:
+            stop_temp = True
+        if stop == True or stop_temp == True:
+            checking = False
             break
+
+    if checking == False:
+        board = tempBoard
     print(board)
-    return stop
+    return stop, board, stop_temp
 
 def tilt():
-    stop = False
-    while (stop == False):
+    ggg = np.array([["-", "-", "I", "B", "B"],
+                      ["-", "-", "-", "-", "-"],
+                      ["-", "-", "X", "-", "-"],
+                      ["-", "-", "-", "-", "-"],
+                      ["G", "B", "-", "-", "-"]])
+
+    # board = np.array([["-", "-", "-", "-", "-"],
+    #                      ["-", "-", "-", "-", "-"],
+    #                      ["-", "-", "X", "-", "-"],
+    #                      ["-", "-", "-", "-", "-"],
+    #                      ["-", "B", "B", "G", "B"]])
+
+    # board = np.array([["-", "-", "-", "-", "-"],
+    #                   ["B", "-", "-", "-", "-"],
+    #                   ["B", "-", "X", "-", "-"],
+    #                   ["G", "-", "-", "-", "-"],
+    #                   ["B", "-", "-", "-", "-"]])
+
+    stop_temp = False
+    temp = False
+    while (temp == False):
         print("Enter #: 0. Quit    L. Tilt Left   R. Tilt Right    U. Tilt Up    D. Tilt Down")
         num = input()
         if num == "0":
             print("Exiting the game...")
         elif num == "L":
-            stop = tiltLeft(board)
+            stop_temp, ggg, temp = tiltLeft(ggg)
         elif num == "R":
-            stop = tiltRight(board)
+            stop_temp, ggg, temp = tiltRight(ggg)
         elif num == "U":
-            stop = tiltUp(board)
+            stop_temp, ggg, temp = tiltUp(ggg)
         elif num == "D":
-            stop = tiltDown(board)
+            stop_temp, ggg, temp = tiltDown(ggg)
         else:
             print("Invalid option.")
             continue
