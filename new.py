@@ -17,11 +17,11 @@ g = Network("800px", "1100px", directed=True)
 #     ["-", "-", "-", "-", "-"],
 #     ["-", "-", "I", "-", "-"]])
 
-oriBoard = np.array([["B", "G", "B", "-", "-"],
-                  ["B", "I", "G", "-", "-"],
-                  ["-", "-", "X", "-", "-"],
-                  ["-", "-", "-", "-", "-"],
-                  ["-", "-", "-", "-", "-"]])
+# oriBoard = np.array([["B", "G", "B", "-", "-"],
+#                   ["B", "I", "G", "-", "-"],
+#                   ["-", "-", "X", "-", "-"],
+#                   ["-", "-", "-", "-", "-"],
+#                   ["-", "-", "-", "-", "-"]])
 
 # oriBoard = np.array([["-", "-", "I", "B", "B"],
 #                   ["-", "-", "-", "-", "-"],
@@ -109,7 +109,7 @@ def tiltLeft(board):
                     stop = True
                     board = tempBoard
                     break
-                elif elem == "G" and (j == len(row) or j == len(row) - 1):
+                elif elem == "G" and (j == hole or j == hole + 1):
                     row[j] = "-"
                     count_Green -= 1
                     continue
@@ -206,7 +206,7 @@ def tiltUp(board):
                     stop = True
                     board = tempBoard
                     break
-                elif elem == "G" and (j == len(column) or j == len(column) - 1):
+                elif elem == "G" and (j == hole or j == hole + 1):
                     column[j] = "-"
                     count_Green -= 1
                     continue
@@ -379,17 +379,37 @@ def tiltRecursive(board, moves, g):
             g.add_edge(str(board), str(board_Down), title="D")
 
 def main():
-    board = np.array([["B", "G", "B", "-", "-"],
-                  ["B", "I", "G", "-", "-"],
-                  ["-", "-", "X", "-", "-"],
-                  ["-", "-", "-", "-", "-"],
-                  ["-", "-", "-", "-", "-"]])
+    # board = np.array([["I", "-", "-", "-", "G"],
+    #               ["G", "-", "I", "-", "B"],
+    #               ["B", "-", "X", "I", "-"],
+    #               ["-", "-", "I", "-", "-"],
+    #               ["-", "I", "-", "-", "-"]])
+    # board = np.array([["-", "-", "I", "B", "B"],
+    #               ["-", "-", "-", "-", "-"],
+    #               ["-", "-", "X", "-", "-"],
+    #               ["-", "-", "-", "-", "-"],
+    #               ["G", "B", "-", "-", "-"]])
+    # board = np.array([["-", "-", "I", "G", "G"],
+    #                   ["-", "-", "B", "B", "B"],
+    #                   ["-", "-", "X", "-", "-"],
+    #                   ["-", "I", "-", "-", "-"],
+    #                   ["-", "-", "-", "-", "-"]])
+    # board = np.array([["I", "I", "-", "-", "I"],
+    #                   ["G", "G", "-", "-", "-"],
+    #                   ["B", "-", "X", "-", "-"],
+    #                   ["-", "I", "-", "-", "-"],
+    #                   ["-", "-", "I", "-", "-"]])
+    board = np.array([["-", "-", "I", "G", "G"],
+                      ["-", "-", "B", "B", "B"],
+                      ["-", "-", "X", "-", "-"],
+                      ["-", "I", "-", "-", "-"],
+                      ["-", "-", "-", "-", "-"]])
     tempBoard = board.copy()
     moves = [board]
     g = Network("800px", "1100px", directed=True)
     g.add_node(str(moves[0]), color='#00ff1e')
     tiltRecursive(board, moves, g)
-    g.show("tilt.html")
+    g.show("card #19.html")
 
 
 if __name__ == '__main__':

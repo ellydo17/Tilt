@@ -10,11 +10,11 @@ g = Network("800px", "1100px", directed=True)
 # for i in range(1, 37):
 #     g.add_node(i);
 
-ggg = np.array([["-", "-", "-", "-", "-"],
-                      ["-", "-", "-", "-", "-"],
+ggg = np.array([["B", "-", "I", "B", "-"],
+                      ["-", "-", "G", "-", "-"],
                       ["-", "-", "X", "-", "-"],
-                      ["-", "-", "-", "-", "-"],
-                      ["-", "B", "B", "G", "B"]])
+                      ["-", "I", "-", "-", "-"],
+                      ["-", "B", "-", "-", "-"]])
 
 # ggg = np.array([["B", "G", "G", "-", "-"],
 #                       ["B", "I", "B", "-", "-"],
@@ -116,7 +116,7 @@ def tiltLeft(board):
                     stop = True
                     board = tempBoard
                     break
-                elif elem == "G" and (j == len(row) or j == len(row) - 1):
+                elif elem == "G" and (j == hole or j == hole + 1):
                     row[j] = "-"
                     count_Green -= 1
                     continue
@@ -219,7 +219,7 @@ def tiltUp(board):
                     stop = True
                     board = tempBoard
                     break
-                elif elem == "G" and (j == len(column) or j == len(column) - 1):
+                elif elem == "G" and (j == hole or j == hole + 1):
                     column[j] = "-"
                     count_Green -= 1
                     continue
@@ -250,11 +250,11 @@ def tiltUp(board):
     return stop, board, stop_temp
 
 def tilt():
-    ggg = np.array([["-", "-", "-", "-", "-"],
-                      ["-", "-", "-", "-", "-"],
-                      ["-", "-", "X", "-", "-"],
-                      ["-", "-", "-", "-", "-"],
-                      ["-", "B", "B", "G", "B"]])
+    ggg = np.array([["-", "-", "G", "-", "-"],
+                    ["-", "-", "G", "-", "-"],
+                    ["-", "-", "X", "-", "-"],
+                    ["-", "I", "-", "-", "-"],
+                    ["B", "B", "-", "B", "-"]])
 
     # board = np.array([["-", "-", "-", "-", "-"],
     #                      ["-", "-", "-", "-", "-"],
