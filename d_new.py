@@ -29,7 +29,7 @@ def tiltRight(board):
                     stop = True
                     board = tempBoard
                     break
-                elif elem == "G" and (j == hole - 2 or j == hole - 3) and j > blocker:  # green node goes into the hole
+                elif elem == "G" and j < hole - 1 < blocker:  # green node goes into the hole
                     row[j] = "-"
                     count_Green -= 1
                     continue
@@ -75,7 +75,7 @@ def tiltLeft(board):
                     stop = True
                     board = tempBoard
                     break
-                elif elem == "G" and (j == hole or j == hole + 1) and j < blocker:
+                elif elem == "G" and j > hole - 1 > blocker:
                     row[j] = "-"
                     count_Green -= 1
                     continue
@@ -121,7 +121,7 @@ def tiltDown(board):
                     stop = True
                     board = tempBoard
                     break
-                elif elem == "G" and (j == hole - 2 or j == hole - 3) and j > blocker:
+                elif elem == "G" and j < hole - 1 < blocker:
                     column[j] = "-"
                     count_Green -= 1
                     continue
@@ -168,7 +168,7 @@ def tiltUp(board):
                     stop = True
                     board = tempBoard
                     break
-                elif elem == "G" and (j == hole or j == hole + 1) and j < blocker:
+                elif elem == "G" and j > hole - 1 > blocker:
                     column[j] = "-"
                     count_Green -= 1
                     continue
@@ -274,6 +274,7 @@ def tiltRecursiveEdge(board, moves, edges):
                 # add the edge between the board_Right and the current board
                 edges.append((str(getBoardIndices(board)), str(getBoardIndices(board_Left)), 1))
                 edges.append((str(getBoardIndices(board_Left)), str(getBoardIndices(board_Left)), 1))
+                print(((str(getBoardIndices(board_Left)), str(getBoardIndices(board_Left)), 1)))
         elif findMoves(board_Left, moves):
             # add the node of the board_Left
             # g.add_node(str(board_Left))
@@ -297,11 +298,12 @@ def tiltRecursiveEdge(board, moves, edges):
                 # add the edge between the board_Right and the current board
                 edges.append((str(getBoardIndices(board)), str(getBoardIndices(board_Right)), 1))
                 edges.append((str(getBoardIndices(board_Right)), str(getBoardIndices(board_Right)), 1))
+                print(((str(getBoardIndices(board_Right)), str(getBoardIndices(board_Right)), 1)))
         elif findMoves(board_Right, moves):
             # add the node of the board_Right
             # g.add_node(str(board_Right))
             # add the edge between the board_Right and the current board
-            edges.append((str(getBoardIndices(board)), str(getBoardIndices(board_Right)), 1))
+            edges.append(((str(getBoardIndices(board)), str(getBoardIndices(board_Right)), 1)))
 
     if not np.array_equal(board_Up, board):
         if not findMoves(board_Up, moves):
@@ -319,6 +321,7 @@ def tiltRecursiveEdge(board, moves, edges):
                 # add the edge between the board_Right and the current board
                 edges.append((str(getBoardIndices(board)), str(getBoardIndices(board_Up)), 1))
                 edges.append((str(getBoardIndices(board_Up)), str(getBoardIndices(board_Up)), 1))
+                print(((str(getBoardIndices(board_Up)), str(getBoardIndices(board_Up)), 1)))
         elif findMoves(board_Up, moves):
             # add the node of the board_Up
             # g.add_node(str(board_Up))
@@ -341,6 +344,7 @@ def tiltRecursiveEdge(board, moves, edges):
                 # add the edge between the board_Right and the current board
                 edges.append((str(getBoardIndices(board)), str(getBoardIndices(board_Down)), 1))
                 edges.append((str(getBoardIndices(board_Down)), str(getBoardIndices(board_Down)), 1))
+                print(((str(getBoardIndices(board_Down)), str(getBoardIndices(board_Down)), 1)))
         elif findMoves(board_Down, moves):
             # add the node of the board_Down
             # g.add_node(str(board_Down))
@@ -381,11 +385,11 @@ if __name__ == "__main__":
     #               ["-", "-", "I", "-", "-"]])
     # card #2
     # board = np.array([["I", "G", "B", "-", "-"],
-    #                   ["-", "-", "-", "-", "-"],
-    #                   ["-", "-", "X", "-", "-"],
-    #                   ["-", "-", "-", "-", "-"],
-    #                   ["-", "-", "-", "-", "-"]])
-    # card #3
+    #               ["-", "-", "-", "-", "-"],
+    #               ["-", "-", "X", "-", "-"],
+    #               ["-", "-", "-", "-", "-"],
+    #               ["-", "-", "-", "-", "-"]])
+    # # card #3
     # board = np.array([["B", "G", "I", "-", "-"],
     #                   ["-", "-", "-", "-", "-"],
     #                   ["-", "-", "X", "-", "-"],
@@ -416,18 +420,18 @@ if __name__ == "__main__":
     #                   ["G", "-", "-", "-", "-"],
     #                   ["B", "-", "-", "-", "-"]])
     # card #8
-    # board = np.array([["G", "-", "I", "-", "-"],
-    #                   ["G", "I", "I", "-", "-"],
-    #                   ["B", "I", "X", "-", "-"],
-    #                   ["B", "-", "-", "-", "-"],
-    #                   ["B", "-", "-", "-", "-"]])
+    board = np.array([["G", "-", "I", "-", "-"],
+                      ["G", "I", "I", "-", "-"],
+                      ["B", "I", "X", "-", "-"],
+                      ["B", "-", "-", "-", "-"],
+                      ["B", "-", "-", "-", "-"]])
     # card #9
     # board = np.array([["-", "-", "I", "B", "B"],
     #                   ["-", "-", "-", "-", "-"],
     #                   ["-", "-", "X", "-", "-"],
     #                   ["-", "-", "-", "-", "-"],
     #                   ["G", "B", "-", "-", "-"]])
-    # card #10
+    # # card #10
     # board = np.array([["-", "-", "-", "-", "-"],
     #                   ["-", "-", "-", "-", "-"],
     #                   ["-", "-", "X", "B", "B"],
@@ -439,7 +443,7 @@ if __name__ == "__main__":
     #                   ["-", "-", "X", "-", "-"],
     #                   ["-", "-", "-", "-", "-"],
     #                   ["-", "-", "-", "-", "-"]])
-    # card #12
+    # # card #12
     # board = np.array([["-", "I", "-", "-", "-"],
     #                   ["-", "G", "I", "G", "-"],
     #                   ["-", "-", "X", "I", "-"],
@@ -488,11 +492,137 @@ if __name__ == "__main__":
     #                   ["-", "I", "-", "-", "-"],
     #                   ["-", "-", "-", "-", "-"]])
     # card #20
-    board = np.array([["I", "B", "-", "-", "-"],
-                      ["G", "-", "I", "-", "-"],
-                      ["B", "-", "X", "-", "-"],
-                      ["-", "-", "I", "-", "-"],
-                      ["-", "-", "I", "-", "-"]])
+    # board = np.array([["I", "B", "-", "-", "-"],
+    #                   ["G", "-", "I", "-", "-"],
+    #                   ["B", "-", "X", "-", "-"],
+    #                   ["-", "-", "I", "-", "-"],
+    #                   ["-", "-", "I", "-", "-"]])
+    # card #21
+    # board = np.array([["I", "-", "I", "-", "I"],
+    #                   ["-", "-", "-", "-", "-"],
+    #                   ["-", "I", "X", "-", "-"],
+    #                   ["-", "-", "I", "-", "G"],
+    #                   ["-", "-", "I", "-", "B"]])
+    # card #22
+    # board = np.array([["-", "-", "I", "G", "B"],
+    #                   ["-", "I", "-", "-", "G"],
+    #                   ["-", "-", "X", "-", "-"],
+    #                   ["-", "-", "-", "-", "-"],
+    #                   ["-", "-", "-", "-", "B"]])
+    # card #23
+    # board = np.array([["-", "-", "I", "-", "-"],
+    #                   ["G", "-", "-", "-", "-"],
+    #                   ["I", "-", "X", "-", "-"],
+    #                   ["-", "-", "-", "-", "-"],
+    #                   ["I", "B", "-", "-", "I"]])
+    # card #24
+    # board = np.array([["I", "-", "-", "-", "-"],
+    #                   ["-", "-", "I", "G", "G"],
+    #                   ["-", "-", "X", "I", "I"],
+    #                   ["-", "-", "-", "B", "B"],
+    #                   ["-", "-", "-", "-", "-"]])
+    # card #25
+    # board = np.array([["I", "-", "-", "-", "-"],
+    #                   ["-", "-", "-", "-", "I"],
+    #                   ["-", "-", "X", "I", "G"],
+    #                   ["-", "-", "I", "B", "G"],
+    #                   ["-", "-", "-", "B", "B"]])
+    # card #26
+    # board = np.array([["I", "-", "I", "-", "-"],
+    #                   ["-", "-", "-", "-", "-"],
+    #                   ["-", "-", "X", "-", "-"],
+    #                   ["-", "-", "B", "B", "B"],
+    #                   ["-", "-", "I", "G", "B"]])
+    # card #27
+    # board = np.array([["I", "I", "-", "-", "-"],
+    #                   ["-", "-", "I", "-", "-"],
+    #                   ["B", "-", "X", "-", "-"],
+    #                   ["I", "I", "-", "-", "-"],
+    #                   ["B", "G", "-", "-", "-"]])
+    # card #28
+    # board = np.array([["-", "I", "B", "-", "B"],
+    #                   ["-", "I", "B", "-", "G"],
+    #                   ["-", "-", "X", "I", "B"],
+    #                   ["-", "I", "I", "I", "-"],
+    #                   ["-", "-", "-", "-", "-"]])
+    # card #29
+    #accident
+    # board = np.array([["I", "B", "G", "B", "I"],
+    #                   ["-", "I", "I", "-", "-"],
+    #                   ["-", "-", "X", "I", "B"],
+    #                   ["-", "-", "-", "-", "-"],
+    #                   ["-", "B", "I", "-", "-"]])
+    # board = np.array([["I", "B", "G", "B", "I"],
+    #                   ["-", "I", "I", "-", "-"],
+    #                   ["-", "-", "X", "-", "-"],
+    #                   ["-", "-", "-", "-", "-"],
+    #                   ["-", "B", "I", "-", "-"]])
+    # card #30
+    # board = np.array([["-", "I", "I", "-", "-"],
+    #                   ["-", "-", "-", "-", "-"],
+    #                   ["-", "I", "X", "-", "-"],
+    #                   ["I", "B", "I", "-", "-"],
+    #                   ["B", "G", "B", "-", "I"]])
+    # card #31
+    # board = np.array([["-", "I", "I", "-", "-"],
+    #                   ["-", "-", "-", "-", "-"],
+    #                   ["-", "-", "X", "-", "-"],
+    #                   ["-", "G", "I", "B", "-"],
+    #                   ["-", "I", "B", "G", "-"]])
+    # card #32
+    # board = np.array([["I", "I", "-", "-", "I"],
+    #                   ["G", "G", "-", "-", "-"],
+    #                   ["B", "-", "X", "-", "-"],
+    #                   ["-", "-", "-", "-", "-"],
+    #                   ["-", "-", "I", "-", "-"]])
+    # card #33
+    # board = np.array([["-", "-", "-", "-", "-"],
+    #                   ["-", "-", "-", "-", "-"],
+    #                   ["-", "-", "X", "I", "-"],
+    #                   ["-", "-", "I", "G", "B"],
+    #                   ["I", "-", "I", "I", "G"]])
+    # card #34
+    # board = np.array([["-", "I", "-", "I", "-"],
+    #                   ["-", "-", "-", "-", "-"],
+    #                   ["-", "I", "X", "-", "-"],
+    #                   ["-", "G", "B", "I", "-"],
+    #                   ["-", "G", "B", "I", "-"]])
+    # card #35
+    # board = np.array([["-", "G", "I", "B", "-"],
+    #                   ["G", "B", "I", "-", "-"],
+    #                   ["I", "-", "X", "-", "-"],
+    #                   ["B", "-", "-", "-", "-"],
+    #                   ["-", "-", "-", "-", "-"]])
+    # card #36
+    # board = np.array([["-", "I", "-", "B", "G"],
+    #                   ["-", "I", "-", "G", "B"],
+    #                   ["-", "-", "X", "I", "B"],
+    #                   ["-", "-", "-", "-", "-"],
+    #                   ["-", "-", "-", "I", "-"]])
+    # card #37
+    # board = np.array([["-", "-", "I", "B", "G"],
+    #                   ["-", "I", "-", "B", "G"],
+    #                   ["-", "I", "X", "-", "-"],
+    #                   ["-", "-", "I", "-", "-"],
+    #                   ["-", "-", "-", "-", "-"]])
+    # card #38
+    # board = np.array([["I", "B", "I", "-", "-"],
+    #                   ["G", "-", "-", "-", "-"],
+    #                   ["G", "-", "X", "-", "I"],
+    #                   ["-", "-", "-", "-", "I"],
+    #                   ["-", "-", "I", "-", "-"]])
+    # card #39
+    # board = np.array([["I", "-", "I", "G", "G"],
+    #                   ["-", "-", "-", "B", "I"],
+    #                   ["-", "-", "X", "I", "-"],
+    #                   ["-", "-", "I", "-", "-"],
+    #                   ["-", "-", "-", "-", "-"]])
+    # card #40
+    # board = np.array([["I", "-", "-", "-", "G"],
+    #                   ["G", "-", "I", "-", "B"],
+    #                   ["B", "-", "X", "I", "-"],
+    #                   ["-", "-", "I", "-", "-"],
+    #                   ["-", "I", "-", "-", "-"]])
     moves = [board]
     edges = []
     tiltRecursiveEdge(board, moves, edges)
@@ -500,7 +630,7 @@ if __name__ == "__main__":
     print("=== Dijkstra ===")
     print(*edges, sep = "\n")
     print("Starting -> Winning: ", end="")
-    print(dijkstra(edges, "0", "96"))
+    print(dijkstra(edges, "0", "8"))
 
     while (True):
         num = int(input("What is the configuration for this node? "))
