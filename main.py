@@ -65,7 +65,8 @@ def tiltRight(board):
                     stop = True
                     board = tempBoard
                     break
-                elif elem == "G" and (j == hole - 2 or j == hole - 3):  # green node goes into the hole
+                # elif elem == "G" and (j == hole - 2 or j == hole - 3) and j > blocker:  # green node goes into the hole
+                elif elem == "G" and j < hole - 1 < blocker:
                     row[j] = "-"
                     count_Green -= 1
                     continue
@@ -116,7 +117,8 @@ def tiltLeft(board):
                     stop = True
                     board = tempBoard
                     break
-                elif elem == "G" and (j == hole or j == hole + 1):
+                # elif elem == "G" and (j == hole or j == hole + 1) and j < blocker:
+                elif elem == "G" and j > hole - 1 > blocker:
                     row[j] = "-"
                     count_Green -= 1
                     continue
@@ -167,7 +169,8 @@ def tiltDown(board):
                     stop = True
                     board = tempBoard
                     break
-                elif elem == "G" and (j == hole - 2 or j == hole - 3):
+                # elif elem == "G" and (j == hole - 2 or j == hole - 3) and j > blocker:
+                elif elem == "G" and j < hole - 1 < blocker:
                     column[j] = "-"
                     count_Green -= 1
                     continue
@@ -219,7 +222,7 @@ def tiltUp(board):
                     stop = True
                     board = tempBoard
                     break
-                elif elem == "G" and (j == hole or j == hole + 1):
+                elif elem == "G" and (j == hole or j == hole + 1) and j < blocker:
                     column[j] = "-"
                     count_Green -= 1
                     continue
@@ -250,11 +253,11 @@ def tiltUp(board):
     return stop, board, stop_temp
 
 def tilt():
-    ggg = np.array([["-", "-", "G", "-", "-"],
-                    ["-", "-", "G", "-", "-"],
-                    ["-", "-", "X", "-", "-"],
-                    ["-", "I", "-", "-", "-"],
-                    ["B", "B", "-", "B", "-"]])
+    # ggg = np.array([["-", "-", "G", "-", "-"],
+    #                 ["-", "-", "G", "-", "-"],
+    #                 ["-", "-", "X", "-", "-"],
+    #                 ["-", "I", "-", "-", "-"],
+    #                 ["B", "B", "-", "B", "-"]])
 
     # board = np.array([["-", "-", "-", "-", "-"],
     #                      ["-", "-", "-", "-", "-"],
@@ -267,6 +270,11 @@ def tilt():
     #                   ["B", "-", "X", "-", "-"],
     #                   ["G", "-", "-", "-", "-"],
     #                   ["B", "-", "-", "-", "-"]])
+    ggg = np.array([["I", "-", "G", "-", "I"],
+                      ["B", "-", "I", "-", "-"],
+                      ["G", "I", "X", "I", "G"],
+                      ["-", "-", "I", "-", "-"],
+                      ["-", "-", "G", "-", "-"]])
 
     stop_temp = False
     temp = False
