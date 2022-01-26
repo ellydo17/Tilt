@@ -1,6 +1,8 @@
-from collections import defaultdict
-from heapq import *
+import networkx as nx
+import matplotlib.pyplot as plt
 import numpy as np
+
+# g = nx.Graph("800px", "1100px", directed=True)
 
 def countGreenSliders(board):
     count_Green = 0
@@ -208,51 +210,7 @@ def findMoves(board, moves):
             return True
     return False
 
-def getBoardIndices(board):
-    i = 0
-    for i in range(len(moves)):
-        if np.array_equal(moves[i], board):
-            return i
-
-# def tiltRecursiveNode(board, moves):
-#     board_Left = tiltLeft(board)
-#     board_Right = tiltRight(board)
-#     board_Up = tiltUp(board)
-#     board_Down = tiltDown(board)
-#
-#     if not np.array_equal(board_Left, board):
-#         if not findMoves(board_Left, moves):
-#             if not green(board_Left):
-#                 moves.append(board_Left)
-#                 tiltRecursiveNode(board_Left, moves)
-#             elif green(board_Left):
-#                 moves.append(board_Left)
-#
-#     if not np.array_equal(board_Right, board):
-#         if not findMoves(board_Right, moves):
-#             if not green(board_Right):
-#                 moves.append(board_Right)
-#                 tiltRecursiveNode(board_Right, moves)
-#             elif green(board_Right):
-#                 moves.append(board_Right)
-#
-#     if not np.array_equal(board_Up, board):
-#         if not findMoves(board_Up, moves):
-#             if not green(board_Up):
-#                 moves.append(board_Up)
-#                 tiltRecursiveNode(board_Up, moves)
-#             elif green(board_Up):
-#                 moves.append(board_Up)
-#
-#     if not np.array_equal(board_Down, board):
-#         if not findMoves(board_Down, moves):
-#             if not green(board_Down):
-#                 moves.append(board_Down)
-#                 tiltRecursiveNode(board_Down, moves)
-#             elif green(board_Down):
-#                 moves.append(board_Down)
-
-def tiltRecursiveEdge(board, moves, edges):
+def tiltRecursive(board, moves, g):
     board_Left = tiltLeft(board)
     board_Right = tiltRight(board)
     board_Up = tiltUp(board)
@@ -263,120 +221,91 @@ def tiltRecursiveEdge(board, moves, edges):
             if not green(board_Left):
                 moves.append(board_Left)
                 # add the node of the board_Left
-                # g.add_node(str(board_Left))
+                g.add_node(str(board_Left))
                 # add the edge between the board_Left and the current board
-                edges.append((str(getBoardIndices(board)), str(getBoardIndices(board_Left)), 1))
-                tiltRecursiveEdge(board_Left, moves, edges)
+                g.add_edge(str(board), str(board_Left), title="L")
+                tiltRecursive(board_Left, moves, g)
             elif green(board_Left):
                 moves.append(board_Left)
                 # add the node of the board_Right
-                # g.add_node(str(board_Left))
+                g.add_node(str(board_Left))
                 # add the edge between the board_Right and the current board
-                edges.append((str(getBoardIndices(board)), str(getBoardIndices(board_Left)), 1))
-                edges.append((str(getBoardIndices(board_Left)), str(getBoardIndices(board_Left)), 1))
-                print(((str(getBoardIndices(board_Left)), str(getBoardIndices(board_Left)), 1)))
+                g.add_edge(str(board), str(board_Left), title="L")
+                g.add_edge(str(board_Left), str(board_Left), title="L")
         elif findMoves(board_Left, moves):
             # add the node of the board_Left
-            # g.add_node(str(board_Left))
+            g.add_node(str(board_Left))
             # add the edge between the board_Left and the current board
-            edges.append((str(getBoardIndices(board)), str(getBoardIndices(board_Left)), 1))
+            g.add_edge(str(board), str(board_Left), title="L")
 
     if not np.array_equal(board_Right, board):
         if not findMoves(board_Right, moves):
             if not green(board_Right):
                 moves.append(board_Right)
                 # add the node of the board_Right
-                # g.add_node(str(board_Right))
+                g.add_node(str(board_Right))
                 # add the edge between the board_Right and the current board
-                edges.append((str(getBoardIndices(board)), str(getBoardIndices(board_Right)), 1))
-                edges.append((str(getBoardIndices(board)), str(getBoardIndices(board_Right)), 1))
-                tiltRecursiveEdge(board_Right, moves, edges)
+                g.add_edge(str(board), str(board_Right), title="R")
+                g.add_edge(str(board), str(board_Right), title="R")
+                tiltRecursive(board_Right, moves, g)
             elif green(board_Right):
                 moves.append(board_Right)
                 # add the node of the board_Right
-                # g.add_node(str(board_Right))
+                g.add_node(str(board_Right))
                 # add the edge between the board_Right and the current board
-                edges.append((str(getBoardIndices(board)), str(getBoardIndices(board_Right)), 1))
-                edges.append((str(getBoardIndices(board_Right)), str(getBoardIndices(board_Right)), 1))
-                print(((str(getBoardIndices(board_Right)), str(getBoardIndices(board_Right)), 1)))
+                g.add_edge(str(board), str(board_Right), title="R")
+                g.add_edge(str(board_Right), str(board_Right), title="R")
         elif findMoves(board_Right, moves):
             # add the node of the board_Right
-            # g.add_node(str(board_Right))
+            g.add_node(str(board_Right))
             # add the edge between the board_Right and the current board
-            edges.append(((str(getBoardIndices(board)), str(getBoardIndices(board_Right)), 1)))
+            g.add_edge(str(board), str(board_Right), title="R")
 
     if not np.array_equal(board_Up, board):
         if not findMoves(board_Up, moves):
             if not green(board_Up):
                 moves.append(board_Up)
                 # add the node of the board_Up
-                # g.add_node(str(board_Up))
+                g.add_node(str(board_Up))
                 # add the edge between the board_Up and the current board
-                edges.append((str(getBoardIndices(board)), str(getBoardIndices(board_Up)), 1))
-                tiltRecursiveEdge(board_Up, moves, edges)
+                g.add_edge(str(board), str(board_Up), title="U")
+                tiltRecursive(board_Up, moves, g)
             elif green(board_Up):
                 moves.append(board_Up)
                 # add the node of the board_Right
-                # g.add_node(str(board_Up))
+                g.add_node(str(board_Up))
                 # add the edge between the board_Right and the current board
-                edges.append((str(getBoardIndices(board)), str(getBoardIndices(board_Up)), 1))
-                edges.append((str(getBoardIndices(board_Up)), str(getBoardIndices(board_Up)), 1))
-                print(((str(getBoardIndices(board_Up)), str(getBoardIndices(board_Up)), 1)))
+                g.add_edge(str(board), str(board_Up), title="U")
+                g.add_edge(str(board_Up), str(board_Up), title="U")
         elif findMoves(board_Up, moves):
             # add the node of the board_Up
-            # g.add_node(str(board_Up))
+            g.add_node(str(board_Up))
             # add the edge between the board_Up and the current board
-            edges.append((str(getBoardIndices(board)), str(getBoardIndices(board_Up)), 1))
+            g.add_edge(str(board), str(board_Up), title="U")
 
     if not np.array_equal(board_Down, board):
         if not findMoves(board_Down, moves):
             if not green(board_Down):
                 moves.append(board_Down)
                 # add the node of the board_Down
-                # g.add_node(str(board_Down))
+                g.add_node(str(board_Down))
                 # add the edge between the board_Down and the current board
-                edges.append((str(getBoardIndices(board)), str(getBoardIndices(board_Down)), 1))
-                tiltRecursiveEdge(board_Down, moves, edges)
+                g.add_edge(str(board), str(board_Down), title="D")
+                tiltRecursive(board_Down, moves, g)
             elif green(board_Down):
                 moves.append(board_Down)
                 # add the node of the board_Right
-                # g.add_node(str(board_Down))
+                g.add_node(str(board_Down))
                 # add the edge between the board_Right and the current board
-                edges.append((str(getBoardIndices(board)), str(getBoardIndices(board_Down)), 1))
-                edges.append((str(getBoardIndices(board_Down)), str(getBoardIndices(board_Down)), 1))
-                print(((str(getBoardIndices(board_Down)), str(getBoardIndices(board_Down)), 1)))
+                g.add_edge(str(board), str(board_Down), title="D")
+                g.add_edge(str(board_Down), str(board_Down), title="D")
         elif findMoves(board_Down, moves):
             # add the node of the board_Down
-            # g.add_node(str(board_Down))
+            g.add_node(str(board_Down))
             # add the edge between the board_Down and the current board
-            edges.append((str(getBoardIndices(board)), str(getBoardIndices(board_Down)), 1))
+            g.add_edge(str(board), str(board_Down), title="D")
 
-def dijkstra(edges, f, t):
-    g = defaultdict(list)
-    for l, r, c in edges:
-        g[l].append((c, r))
-
-    q, seen, mins = [(0, f, [])], set(), {f: 0}
-    while q:
-        (cost, v1, path) = heappop(q)
-        if v1 not in seen:
-            seen.add(v1)
-            path = [v1] + path
-            if v1 == t:
-                return (cost, path)
-
-            for c, v2 in g.get(v1, ()):
-                if v2 in seen:
-                    continue
-                prev = mins.get(v2, None)
-                next = cost + c
-                if prev is None or next < prev:
-                    mins[v2] = next
-                    heappush(q, (next, v2, path))
-
-    return (float("inf"), [])
-
-if __name__ == "__main__":
+def main():
     # card #1
     # board = np.array([["G", "I", "-", "-", "-"],
     #               ["-", "-", "-", "-", "-"],
@@ -402,11 +331,11 @@ if __name__ == "__main__":
     #                   ["-", "-", "-", "-", "-"],
     #                   ["B", "-", "-", "-", "G"]])
     # card #5
-    # board = np.array([["B", "G", "B", "-", "-"],
-    #                   ["B", "I", "G", "-", "-"],
-    #                   ["-", "-", "X", "-", "-"],
-    #                   ["-", "-", "-", "-", "-"],
-    #                   ["-", "-", "-", "-", "-"]])
+    board = np.array([["B", "G", "B", "-", "-"],
+                      ["B", "I", "G", "-", "-"],
+                      ["-", "-", "X", "-", "-"],
+                      ["-", "-", "-", "-", "-"],
+                      ["-", "-", "-", "-", "-"]])
     # card #6
     # board = np.array([["-", "I", "B", "-", "G"],
     #                   ["-", "I", "-", "-", "-"],
@@ -443,7 +372,7 @@ if __name__ == "__main__":
     #                   ["-", "-", "X", "-", "-"],
     #                   ["-", "-", "-", "-", "-"],
     #                   ["-", "-", "-", "-", "-"]])
-    # card #12
+    # # card #12
     # board = np.array([["-", "I", "-", "-", "-"],
     #                   ["-", "G", "I", "G", "-"],
     #                   ["-", "-", "X", "I", "-"],
@@ -456,11 +385,11 @@ if __name__ == "__main__":
     #                   ["-", "-", "-", "-", "-"],
     #                   ["G", "G", "-", "-", "B"]])
     # card #14
-    board = np.array([["-", "-", "-", "-", "-"],
-                      ["-", "-", "-", "-", "-"],
-                      ["-", "-", "X", "-", "-"],
-                      ["-", "-", "I", "I", "-"],
-                      ["-", "-", "B", "G", "I"]])
+    # board = np.array([["-", "-", "-", "-", "-"],
+    #                   ["-", "-", "-", "-", "-"],
+    #                   ["-", "-", "X", "-", "-"],
+    #                   ["-", "-", "I", "I", "-"],
+    #                   ["-", "-", "B", "G", "I"]])
     # card #15
     # board = np.array([["I", "B", "-", "-", "B"],
     #                   ["-", "-", "-", "-", "G"],
@@ -546,12 +475,6 @@ if __name__ == "__main__":
     #                   ["-", "I", "I", "I", "-"],
     #                   ["-", "-", "-", "-", "-"]])
     # card #29
-    #accident
-    # board = np.array([["I", "B", "G", "B", "I"],
-    #                   ["-", "I", "I", "-", "-"],
-    #                   ["-", "-", "X", "I", "B"],
-    #                   ["-", "-", "-", "-", "-"],
-    #                   ["-", "B", "I", "-", "-"]])
     # board = np.array([["I", "B", "G", "B", "I"],
     #                   ["-", "I", "I", "-", "-"],
     #                   ["-", "-", "X", "-", "-"],
@@ -623,19 +546,27 @@ if __name__ == "__main__":
     #                   ["B", "-", "X", "I", "-"],
     #                   ["-", "-", "I", "-", "-"],
     #                   ["-", "I", "-", "-", "-"]])
+
+    # tempBoard = board.copy()
     moves = [board]
-    edges = []
-    tiltRecursiveEdge(board, moves, edges)
+    # g = Network("800px", "1100px", directed=True)
+    g = nx.DiGraph()
+    g.add_node(str(moves[0]), color='#00ff1e')
+    tiltRecursive(board, moves, g)
+    print(len(moves))
 
-    print("=== Dijkstra ===")
-    print(*edges, sep = "\n")
-    print("Starting -> Winning: ", end="")
-    print(dijkstra(edges, "0", "8"))
-
+    #condensation
+    scc = list(nx.strongly_connected_components(g))
+    c = nx.condensation(g, scc)
+    nx.draw(c, with_labels=True, font_weight='bold')
+    plt.show()
     while (True):
         num = int(input("What is the configuration for this node? "))
         if input != "n":
-            print(moves[num])
+            print(scc[num])
             continue
         else:
             break
+
+if __name__ == '__main__':
+    main()

@@ -1,7 +1,7 @@
-from pyvis.network import Network
+from pyvis import network as net
 import numpy as np
 
-g = Network("800px", "1100px", directed=True)
+# g = nx.Graph("800px", "1100px", directed=True)
 
 def countGreenSliders(board):
     count_Green = 0
@@ -492,11 +492,11 @@ def main():
     #                   ["-", "G", "I", "B", "-"],
     #                   ["-", "I", "B", "G", "-"]])
     # card #32
-    # board = np.array([["I", "I", "-", "-", "I"],
-    #                   ["G", "G", "-", "-", "-"],
-    #                   ["B", "-", "X", "-", "-"],
-    #                   ["-", "-", "-", "-", "-"],
-    #                   ["-", "-", "I", "-", "-"]])
+    board = np.array([["I", "I", "-", "-", "I"],
+                      ["G", "G", "-", "-", "-"],
+                      ["B", "-", "X", "-", "-"],
+                      ["-", "-", "-", "-", "-"],
+                      ["-", "-", "I", "-", "-"]])
     # card #33
     # board = np.array([["-", "-", "-", "-", "-"],
     #                   ["-", "-", "-", "-", "-"],
@@ -540,20 +540,20 @@ def main():
     #                   ["-", "-", "I", "-", "-"],
     #                   ["-", "-", "-", "-", "-"]])
     # card #40
-    board = np.array([["I", "-", "-", "-", "G"],
-                      ["G", "-", "I", "-", "B"],
-                      ["B", "-", "X", "I", "-"],
-                      ["-", "-", "I", "-", "-"],
-                      ["-", "I", "-", "-", "-"]])
+    # board = np.array([["I", "-", "-", "-", "G"],
+    #                   ["G", "-", "I", "-", "B"],
+    #                   ["B", "-", "X", "I", "-"],
+    #                   ["-", "-", "I", "-", "-"],
+    #                   ["-", "I", "-", "-", "-"]])
 
     # tempBoard = board.copy()
     moves = [board]
-    g = Network("800px", "1100px", directed=True)
+    # g = Network("800px", "1100px", directed=True)
+    g = net.Network("800px", "1100px", directed=True)
     g.add_node(str(moves[0]), color='#00ff1e')
     tiltRecursive(board, moves, g)
     print(len(moves))
-    g.show("card #40.html")
-
+    g.show("card #32.html")
 
 if __name__ == '__main__':
     main()
