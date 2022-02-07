@@ -1,10 +1,11 @@
 from pyvis import network as net
 import numpy as np
-
+from tabulate import tabulate
 
 # g = nx.Graph("800px", "1100px", directed=True)
 
 def countGreenSliders(board):
+    """Count the current number of green sliders on the board."""
     count_Green = 0
     for i in range(len(board)):
         for j in range(len(board[i])):
@@ -14,7 +15,7 @@ def countGreenSliders(board):
 
 
 def tiltRight(board):
-    # tilt to the right
+    """Obtain the new board configuration after a right tilt."""
     board = board.copy()
     stop = False
     checking = True
@@ -59,7 +60,7 @@ def tiltRight(board):
 
 
 def tiltLeft(board):
-    # tilt to the left
+    """Obtain the new board configuration after a left tilt."""
     board = board.copy()
     checking = True
     stop = False
@@ -106,7 +107,7 @@ def tiltLeft(board):
 
 
 def tiltDown(board):
-    # tilt down
+    """Obtain the new board configuration after a down tilt."""
     board = board.copy()
 
     stop = False
@@ -153,7 +154,7 @@ def tiltDown(board):
 
 
 def tiltUp(board):
-    # tilt up
+    """Obtain the new board configuration after a up tilt."""
     board = board.copy()
 
     stop = False
@@ -201,6 +202,7 @@ def tiltUp(board):
 
 
 def green(board):
+    """Check whether there is any green slider on the board. Return True if there is. Return False if there isn't."""
     count_Green = countGreenSliders(board)
     if count_Green == 0:
         return True
@@ -209,19 +211,22 @@ def green(board):
 
 
 def findMoves(board, moves):
+    """Check whether the board configuration exists. Return True if it does. Return False if there it doesn't."""
     for i in moves:
         if np.array_equal(i, board):
             return True
     return False
 
 def returnBoardIndex(board, moves):
+    """Return the index of a certain board in the array. Return "board doesn't exist" if the board
+    configuration can't be found."""
     for i in range(len(moves)):
         if np.array_equal(moves[i], board):
             return i
     return "board doesn't exist"
 
-# function to return key for any value
 def get_key(dict, val):
+    """Return key for a value in the list"""
     for key, value in dict.items():
         if val == value:
             return key
@@ -229,6 +234,7 @@ def get_key(dict, val):
     return "key doesn't exist"
 
 def create_graph(dict, moves, g, board_direction, board_original, title_edge):
+    """Create a graph for all possible game moves"""
     if not np.array_equal(board_direction, board_original):
         if not findMoves(board_direction, moves):
             if not green(board_direction):
@@ -253,6 +259,7 @@ def create_graph(dict, moves, g, board_direction, board_original, title_edge):
 
 
 def tiltRecursive(dict, board, moves, g):
+    """Tilt the board to all possible directions."""
     board_Left = tiltLeft(board)
     board_Right = tiltRight(board)
     board_Up = tiltUp(board)
@@ -266,6 +273,14 @@ def tiltRecursive(dict, board, moves, g):
 
     create_graph(dict, moves, g, board_Down, board, "D")
 
+def make_table(dict):
+    """Make a table for the board configurations. One column is the node number,
+    one column is the corresponding board configuration."""
+    # return tabulate(dict, headers='keys')
+    table = [["Number", "Nodes"]]
+    for things in dict:
+        table.append([things, dict[things]])
+    return tabulate(table, headers='firstrow', tablefmt='fancy_grid')
 
 def main():
     board = [np.array([["G", "I", "-", "-", "-"],
@@ -469,15 +484,19 @@ def main():
                        ["-", "-", "I", "-", "-"],
                        ["-", "I", "-", "-", "-"]])]
 
-    board_num = 4
-    moves = [board[board_num]]
-    dict_nodes_edges = {0: str(board[board_num])}
+    board_num = 40
+    moves = [board[board_num - 1]]
+    dict_nodes_edges = {'0': str(board[board_num - 1])}
     g = net.Network("800px", "1100px", directed=True)
     g.add_node(0, color='#00ff1e')
-    tiltRecursive(dict_nodes_edges, board[board_num], moves, g)
-    # print(len(moves))
+    tiltRecursive(dict_nodes_edges, board[board_num - 1], moves, g)
+    print(len(moves))
     print(dict_nodes_edges)
-    g.show(f"card #{board_num + 1}.html")
+    #make a table: one column is number 0, 1, 2,...; and the other column is the board configuration
+    print(make_table(dict_nodes_edges))
+    with open(f'table {board_num}.txt', 'w') as f:
+        f.write(make_table(dict_nodes_edges))
+    g.show(f"card #{board_num}.html")
 
 
 if __name__ == '__main__':
