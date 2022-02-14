@@ -1,3 +1,5 @@
+from collections import defaultdict
+from heapq import *
 from pyvis import network as net
 import numpy as np
 from tabulate import tabulate
@@ -233,8 +235,9 @@ def get_key(dict, val):
 
     return "key doesn't exist"
 
-def create_graph(dict, moves, g, board_direction, board_original, title_edge):
-    """Create a graph for all possible game moves"""
+def create_graph(dict, moves, g, board_direction, board_original, title_edge, edges):
+    """Create a graph for all possible game moves. Here, we add edges with weight = 1 to
+    the edges array for the Dijkstra's algorithm."""
     if not np.array_equal(board_direction, board_original):
         if not findMoves(board_direction, moves):
             if not green(board_direction):
@@ -243,7 +246,8 @@ def create_graph(dict, moves, g, board_direction, board_original, title_edge):
                 g.add_node(returnBoardIndex(board_direction, moves))
                 # add the edge between the board_Left and the current board
                 g.add_edge(returnBoardIndex(board_original, moves), returnBoardIndex(board_direction, moves), title=title_edge)
-                tiltRecursive(dict, board_direction, moves, g)
+                edges.append((str(returnBoardIndex(board_original, moves)), str(returnBoardIndex(board_direction, moves)), 1))
+                tiltRecursive(dict, board_direction, moves, g, edges)
             elif green(board_direction):
                 moves.append(board_direction)
                 dict[f"{returnBoardIndex(board_direction, moves)}"] = str(board_direction)
@@ -251,27 +255,56 @@ def create_graph(dict, moves, g, board_direction, board_original, title_edge):
                 # add the edge between the board_Right and the current board
                 g.add_edge(returnBoardIndex(board_original, moves), returnBoardIndex(board_direction, moves), title=title_edge)
                 g.add_edge(returnBoardIndex(board_direction, moves), returnBoardIndex(board_direction, moves), title=title_edge)
+                edges.append((str(returnBoardIndex(board_original, moves)), str(returnBoardIndex(board_direction, moves)), 1))
+                edges.append((str(returnBoardIndex(board_direction, moves)), str(returnBoardIndex(board_direction, moves)), 1))
         elif findMoves(board_direction, moves):
             # add the node of the board_Left
             g.add_node(returnBoardIndex(board_direction, moves))
             # add the edge between the board_Left and the current board
             g.add_edge(returnBoardIndex(board_original, moves), returnBoardIndex(board_direction, moves), title=title_edge)
+            edges.append((str(returnBoardIndex(board_original, moves)), str(returnBoardIndex(board_direction, moves)), 1))
 
-
-def tiltRecursive(dict, board, moves, g):
+def tiltRecursive(dict, board, moves, g, edges):
     """Tilt the board to all possible directions."""
     board_Left = tiltLeft(board)
     board_Right = tiltRight(board)
     board_Up = tiltUp(board)
     board_Down = tiltDown(board)
 
-    create_graph(dict, moves, g, board_Left, board, "L")
+    create_graph(dict, moves, g, board_Left, board, "L", edges)
 
-    create_graph(dict, moves, g, board_Right, board, "R")
+    create_graph(dict, moves, g, board_Right, board, "R", edges)
 
-    create_graph(dict, moves, g, board_Up, board, "U")
+    create_graph(dict, moves, g, board_Up, board, "U", edges)
 
-    create_graph(dict, moves, g, board_Down, board, "D")
+    create_graph(dict, moves, g, board_Down, board, "D", edges)
+
+def dijkstra(edges, f, t):
+    """Calculate the length of the shortest path and return the sequence of
+    nodes in the path."""
+    g = defaultdict(list)
+    for l, r, c in edges:
+        g[l].append((c, r))
+
+    q, seen, mins = [(0, f, [])], set(), {f: 0}
+    while q:
+        (cost, v1, path) = heappop(q)
+        if v1 not in seen:
+            seen.add(v1)
+            path = [v1] + path
+            if v1 == t:
+                return (cost, path)
+
+            for c, v2 in g.get(v1, ()):
+                if v2 in seen:
+                    continue
+                prev = mins.get(v2, None)
+                next = cost + c
+                if prev is None or next < prev:
+                    mins[v2] = next
+                    heappush(q, (next, v2, path))
+
+    return (float("inf"), [])
 
 def make_table(dict):
     """Make a table for the board configurations. One column is the node number,
@@ -484,20 +517,35 @@ def main():
                        ["-", "-", "I", "-", "-"],
                        ["-", "I", "-", "-", "-"]])]
 
-    board_num = 40
+    board_num = 3
     moves = [board[board_num - 1]]
+    #Dijkstra's algorithms
+    edges = []
+
     dict_nodes_edges = {'0': str(board[board_num - 1])}
     g = net.Network("800px", "1100px", directed=True)
     g.add_node(0, color='#00ff1e')
-    tiltRecursive(dict_nodes_edges, board[board_num - 1], moves, g)
-    print(len(moves))
-    print(dict_nodes_edges)
-    #make a table: one column is number 0, 1, 2,...; and the other column is the board configuration
-    print(make_table(dict_nodes_edges))
-    with open(f'table {board_num}.txt', 'w') as f:
-        f.write(make_table(dict_nodes_edges))
-    g.show(f"card #{board_num}.html")
+    tiltRecursive(dict_nodes_edges, board[board_num - 1], moves, g, edges)
 
+    #Dijkstra's algorithms
+    print("Starting -> Winning: ", end="")
+    print(dijkstra(edges, "0", f"{len(moves) - 1}"))
+ 
+    # print(len(moves))
+    # print(dict_nodes_edges)
+    #make a table: one column is number 0, 1, 2,...; and the other column is the board configuration
+    # print(make_table(dict_nodes_edges))
+    # with open(f'table {board_num}.txt', 'w') as f:
+    #     f.write(make_table(dict_nodes_edges))
+    # g.show(f"card #{board_num}.html")
+
+    while (True):
+        num = int(input("What is the configuration for this node? "))
+        if input != "n":
+            print(moves[num])
+            continue
+        else:
+            break
 
 if __name__ == '__main__':
     main()
