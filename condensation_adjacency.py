@@ -484,6 +484,7 @@ def main():
         dict_node_condense[i] = scc[i]
         i += 1
     print(dict_node_condense)
+    
     #make a table: one column is number 0, 1, 2,...; and the other column is the condensation
     print(make_table(dict_node_condense))
     with open(f'table condensation {board_num}.txt', 'w') as f:
