@@ -8,6 +8,9 @@ from tabulate import tabulate
 
 # g = nx.Graph("800px", "1100px", directed=True)
 
+"""A program to generate graphs where each node represent a game move. The label of each node
+is 1, 2, 3,... instead of the whole board configuration."""
+
 def countGreenSliders(board):
     """Count the current number of green sliders on the board."""
     count_Green = 0
@@ -334,7 +337,7 @@ def make_table_dijkstra(tuple):
     # return tabulate(dict, headers='keys')
     table = [["Order", "Path"]]
     for i in range(len(tuple[1])):
-        table.append([i, tuple[1][i]])
+        table.append([i, tuple[1][len(tuple[1]) - 1 - i]])
     return tabulate(table, headers='firstrow', tablefmt='fancy_grid')
 
 def main():
@@ -539,12 +542,13 @@ def main():
                        ["-", "-", "I", "-", "-"],
                        ["-", "I", "-", "-", "-"]])]
 
-    board_num = 3
+    board_num = 18
     moves = [board[board_num - 1]]
     #Dijkstra's algorithms
     edges = []
     node_end = []
 
+    #Generate graphs for all cards
     dict_nodes_edges = {'0': str(board[board_num - 1])}
     g = net.Network("800px", "1100px", directed=True)
     g.add_node(0, color='#00ff1e')
@@ -553,7 +557,7 @@ def main():
 
     #Dijkstra's algorithms
     print("Starting -> Winning: \n", end="")
-    dijkstra_tuple = (dijkstra(edges, "0", f"{int(node_end[0])}"))
+    dijkstra_tuple = (dijkstra(edges, "0", f"77"))
     print(dijkstra_tuple)
     print(make_table_dijkstra(dijkstra_tuple))
  
@@ -568,8 +572,12 @@ def main():
     #make a table: one column is order 0, 1, 2,...; and the other column is the shortest path to the 
     #winning state
     # print(make_table(dict_nodes_edges))
-    with open(f'table {board_num}.txt', 'w') as f:
-        f.write(make_table(dict_nodes_edges))
+    # with open(f'table {board_num}.txt', 'w') as f:
+    #     f.write(make_table(dict_nodes_edges))
+
+    with open(f'table shortest path {board_num}.txt', 'w') as f:
+        f.write(make_table_dijkstra(dijkstra_tuple))
+
     # g.show(f"card #{board_num}.html")
 
     # while (True):

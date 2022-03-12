@@ -2,6 +2,8 @@ from collections import defaultdict
 from heapq import *
 import numpy as np
 
+"""A program to generate shortest path to win in each card."""
+
 def countGreenSliders(board):
     count_Green = 0
     for i in range(len(board)):
@@ -539,7 +541,7 @@ if __name__ == "__main__":
                        ["B", "-", "X", "I", "-"],
                        ["-", "-", "I", "-", "-"],
                        ["-", "I", "-", "-", "-"]])]
-    board_num = 0
+    board_num = 1
     moves = [board[board_num]]
     edges = []
     tiltRecursiveEdge(board[board_num], moves, edges)
