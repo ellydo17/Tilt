@@ -4,7 +4,7 @@ import numpy as np
 from fontTools.misc.py23 import xrange
 from tabulate import tabulate
 
-"""A program to generate a condensation and adjacency matrix for each card."""
+"""A program to generate a condensation and fundamental matrix for each card."""
 
 def countGreenSliders(board):
     count_Green = 0
@@ -267,27 +267,29 @@ def make_table(dict):
         table.append([things, dict[things]])
     return tabulate(table, headers='firstrow', tablefmt='fancy_grid')
 
-# source: https://stackoverflow.com/questions/11705733/best-way-to-calculate-the-fundamental-matrix-of-an-absorbing
-# -markov-chain
-def expected_steps_fast(Q):
-    """Generate the fundamental matrix."""
-    I = np.identity(Q.shape[0])
-    o = np.ones(Q.shape[0])
-    np.linalg.solve(I - Q, o)
+def transition_matrix(g):
+    """A method that generates a transition matrix for a graph of a game card. In a transition matrix,
+    each entry at a position (i,j) corresponding to a probability to transition from node i to node j.
+    Source: https://stackoverflow.com/questions/37311651/get-node-list-from-random-walk-in-networkx"""   
+    # let networkx return the adjacency matrix A
+    A = nx.adjacency_matrix(g)
+    A = A.todense()
+    A = np.array(A, dtype = np.float64)
 
-def example(n):
-    """Generate a very simple transition matrix from a directed graph
-    """
-    g = nx.DiGraph()
-    for i in xrange(n-1):
-        g.add_edge(i+1, i)
-        g.add_edge(i, i+1)
-    g.add_edge(n-1, n)
-    g.add_edge(n, n)
-    m = nx.to_numpy_matrix(g)
-    # normalize rows to ensure m is a valid right stochastic matrix
-    m = m / np.sum(m, axis=1)
-    return m
+    # let's evaluate the degree matrix D
+    D = np.diag(np.sum(A, axis=1))
+
+    # ...and the transition matrix T. T = D^(-1) A. 
+    T = np.dot(np.linalg.inv(D),A)
+    return T
+
+def fundamental_matrix(Q):
+    """Calculate the fundamental matrix. Source: 
+    https://stackoverflow.com/questions/11705733/best-way-to-calculate-the-fundamental-matrix-of-an-absorbing-markov-chain"""
+    I = np.identity(Q.shape[0]) #get the identity matrix that has the same shape as the matrix Q.
+    # o = np.ones(Q.shape[0])
+    F = np.linalg.inv(I-Q)
+    return F
 
 def main():
     board = [np.array([["G", "I", "-", "-", "-"],
@@ -491,7 +493,7 @@ def main():
                        ["-", "-", "I", "-", "-"],
                        ["-", "I", "-", "-", "-"]])]
 
-    board_num = 3
+    board_num = 5
     moves = [board[board_num - 1]]
     g = nx.DiGraph()
     g.add_node(0, color='#00ff1e')
@@ -515,13 +517,15 @@ def main():
     # with open(f'table condensation {board_num}.txt', 'w') as f:
     #     f.write(make_table(dict_node_condense))
 
-    # adjacency matrix source: https://networkx.org/documentation/stable/reference/generated/networkx.linalg
-    # .graphmatrix.adjacency_matrix.html
-    a = nx.adjacency_matrix(g)
-    print(print(a.todense()))
-
     #fundamental matrix
-    expected_steps_fast(a)
+    t = transition_matrix(g)
+    # print(t)
+    # drop the absorbing state
+    q = t[:-1,:-1]
+    # print(q)
+    #calculate the fundamental matrix
+    f = fundamental_matrix(q)
+    print(f)
 
     #condensation graph
     # nx.draw(c, with_labels=True, font_weight='bold')
