@@ -220,8 +220,8 @@ def returnBoardIndex(board, moves):
             return i
     return "board doesn't exist"
 
-def create_graph(moves, g, board_direction, board_original, title_edge):
-    """Create a graph for all possible game moves"""
+def create_graph(moves, g, board_direction, board_original, title_edge, node_end):
+    """Create a graph for all possible game moves. node_end is to store the end nodes that have a loop."""
     if not np.array_equal(board_direction, board_original):
         if not findMoves(board_direction, moves):
             if not green(board_direction):
@@ -229,13 +229,14 @@ def create_graph(moves, g, board_direction, board_original, title_edge):
                 g.add_node(returnBoardIndex(board_direction, moves))
                 # add the edge between the board_Left and the current board
                 g.add_edge(returnBoardIndex(board_original, moves), returnBoardIndex(board_direction, moves), title=title_edge)
-                tiltRecursive(board_direction, moves, g)
+                tiltRecursive(board_direction, moves, g, node_end)
             elif green(board_direction):
                 moves.append(board_direction)
                 g.add_node(returnBoardIndex(board_direction, moves))
                 # add the edge between the board_Right and the current board
                 g.add_edge(returnBoardIndex(board_original, moves), returnBoardIndex(board_direction, moves), title=title_edge)
                 g.add_edge(returnBoardIndex(board_direction, moves), returnBoardIndex(board_direction, moves), title=title_edge)
+                node_end.append(str(returnBoardIndex(board_direction, moves)))
         elif findMoves(board_direction, moves):
             # add the node of the board_Left
             g.add_node(returnBoardIndex(board_direction, moves))
@@ -243,20 +244,20 @@ def create_graph(moves, g, board_direction, board_original, title_edge):
             g.add_edge(returnBoardIndex(board_original, moves), returnBoardIndex(board_direction, moves), title=title_edge)
 
 
-def tiltRecursive(board, moves, g):
+def tiltRecursive(board, moves, g, node_end):
     """Tilt the board to all possible directions."""
     board_Left = tiltLeft(board)
     board_Right = tiltRight(board)
     board_Up = tiltUp(board)
     board_Down = tiltDown(board)
 
-    create_graph(moves, g, board_Left, board, "L")
+    create_graph(moves, g, board_Left, board, "L", node_end)
 
-    create_graph(moves, g, board_Right, board, "R")
+    create_graph(moves, g, board_Right, board, "R", node_end)
 
-    create_graph(moves, g, board_Up, board, "U")
+    create_graph(moves, g, board_Up, board, "U", node_end)
 
-    create_graph(moves, g, board_Down, board, "D")
+    create_graph(moves, g, board_Down, board, "D", node_end)
 
 def make_table(dict):
     """Make a table for the board configurations. One column is the node number,
@@ -493,12 +494,15 @@ def main():
                        ["-", "-", "I", "-", "-"],
                        ["-", "I", "-", "-", "-"]])]
 
-    board_num = 5
+    board_num = 3
     moves = [board[board_num - 1]]
     g = nx.DiGraph()
     g.add_node(0, color='#00ff1e')
-    tiltRecursive(board[board_num - 1], moves, g)
-    # print(len(moves))
+    node_end = []
+    tiltRecursive(board[board_num - 1], moves, g, node_end)
+    
+    #fundamental matrix
+    print(f"{node_end}")
 
     #condensation
     scc = list(nx.strongly_connected_components(g))
@@ -518,14 +522,19 @@ def main():
     #     f.write(make_table(dict_node_condense))
 
     #fundamental matrix
+    np.set_printoptions(linewidth=np.inf)
     t = transition_matrix(g)
-    # print(t)
+    print(t)
     # drop the absorbing state
-    q = t[:-1,:-1]
+    for i in node_end:
+        q = np.delete(t, int(i), 0)
+        q = np.delete(q, int(i), 1)
     # print(q)
+    with open(f'q matrix {board_num}.txt', 'w') as f:
+        f.write(str(q))
     #calculate the fundamental matrix
-    f = fundamental_matrix(q)
-    print(f)
+    # f = fundamental_matrix(q)
+    # print(f)
 
     #condensation graph
     # nx.draw(c, with_labels=True, font_weight='bold')

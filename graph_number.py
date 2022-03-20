@@ -542,7 +542,7 @@ def main():
                        ["-", "-", "I", "-", "-"],
                        ["-", "I", "-", "-", "-"]])]
 
-    board_num = 18
+    board_num = 1
     moves = [board[board_num - 1]]
     #Dijkstra's algorithms
     edges = []
@@ -557,7 +557,7 @@ def main():
 
     #Dijkstra's algorithms
     print("Starting -> Winning: \n", end="")
-    dijkstra_tuple = (dijkstra(edges, "0", f"77"))
+    dijkstra_tuple = (dijkstra(edges, "0", f"{int(node_end[0])}"))
     print(dijkstra_tuple)
     print(make_table_dijkstra(dijkstra_tuple))
  
@@ -575,8 +575,8 @@ def main():
     # with open(f'table {board_num}.txt', 'w') as f:
     #     f.write(make_table(dict_nodes_edges))
 
-    with open(f'table shortest path {board_num}.txt', 'w') as f:
-        f.write(make_table_dijkstra(dijkstra_tuple))
+    # with open(f'table shortest path {board_num}.txt', 'w') as f:
+    #     f.write(make_table_dijkstra(dijkstra_tuple))
 
     # g.show(f"card #{board_num}.html")
 
