@@ -297,6 +297,7 @@ def tiltRecursive(dict, board, moves, g, edges, node_end):
 
     create_graph(dict, moves, g, board_Down, board, "D", edges, node_end)
 
+#Source: https://gist.github.com/kachayev/5990802?permalink_comment_id=2339584
 def dijkstra(edges, f, t):
     g = defaultdict(list)
     for l, r, c in edges:
@@ -542,7 +543,7 @@ def main():
                        ["-", "-", "I", "-", "-"],
                        ["-", "I", "-", "-", "-"]])]
 
-    board_num = 1
+    board_num = 40
     moves = [board[board_num - 1]]
     #Dijkstra's algorithms
     edges = []
@@ -556,13 +557,51 @@ def main():
     print(f"{node_end}")
 
     #Dijkstra's algorithms
-    print("Starting -> Winning: \n", end="")
-    dijkstra_tuple = (dijkstra(edges, "0", f"{int(node_end[0])}"))
-    print(dijkstra_tuple)
-    print(make_table_dijkstra(dijkstra_tuple))
+    # print("Starting -> Winning: \n", end="")
+    # dijkstra_tuple = (dijkstra(edges, "0", f"{int(node_end[0])}"))
+    # print(dijkstra_tuple)
+    # print(make_table_dijkstra(dijkstra_tuple))
  
     # print(len(moves))
     # print(dict_nodes_edges)
+
+    # get adjacency list. This is to add a loop to any node that does not have an outgoing edge.
+    
+    # adj_list = g.get_adj_list()
+    # print(g.get_adj_list())
+    # for key in adj_list:
+    #     values = adj_list[key]
+    #     if len(values) == 1:
+    #         if (key != 0) and (list(values)[0] != key):
+    #             #to determine whether this key apear in any other value 
+    #             #that has the key that is the same as the former key's value.
+    #             #ex: 9: {10}, 10: {9}. Compare 9
+    #             val_compare = adj_list[list(values)[0]] #get the value
+    #             print(key)
+    #             print(list(val_compare))
+    #             # print(f"length is {len(list(val_compare))}")
+    #             flag = 0
+    #             for vals in range(len(list(val_compare))): #need to iterate because it can be 9: {10}, 10: {8, 9}
+    #                 # print(f"vals is {vals}")
+    #                 if (key != list(val_compare)[vals]):  #if they are not the same, print out the value
+    #                     flag = 0
+    #                 elif (key == list(val_compare)[vals]):
+    #                     flag = 1
+    #                     break
+    #             # print(f"element is {list(val_compare)[vals]}")
+    #             if flag == 0:
+    #                 print(f"{key} is valid")
+    #         # g.add_edge(values, values, title="L")
+        
+    adj_list = g.get_adj_list()
+    print(g.get_adj_list())
+    for key in adj_list:
+        values = adj_list[key]
+        if len(values) == 0:
+            print(f"{key} is valid")
+            g.add_edge(key, key, title="L")   
+
+    # g.show(f"card #{board_num}.html")
 
     #make a table: one column is number 0, 1, 2,...; and the other column is the board configuration
     # print(make_table(dict_nodes_edges))
@@ -577,8 +616,6 @@ def main():
 
     # with open(f'table shortest path {board_num}.txt', 'w') as f:
     #     f.write(make_table_dijkstra(dijkstra_tuple))
-
-    # g.show(f"card #{board_num}.html")
 
     # while (True):
     #     num = int(input("What is the configuration for this node? "))

@@ -494,7 +494,7 @@ def main():
                        ["-", "-", "I", "-", "-"],
                        ["-", "I", "-", "-", "-"]])]
 
-    board_num = 3
+    board_num = 9
     moves = [board[board_num - 1]]
     g = nx.DiGraph()
     g.add_node(0, color='#00ff1e')
@@ -524,21 +524,25 @@ def main():
     #fundamental matrix
     np.set_printoptions(linewidth=np.inf)
     t = transition_matrix(g)
-    print(t)
+    # print(t)
     # drop the absorbing state
     for i in node_end:
         q = np.delete(t, int(i), 0)
         q = np.delete(q, int(i), 1)
     # print(q)
-    with open(f'q matrix {board_num}.txt', 'w') as f:
-        f.write(str(q))
+    # with open(f'f matrix {board_num}.txt', 'w') as f:
+    #     f.write(str(f))
     #calculate the fundamental matrix
-    # f = fundamental_matrix(q)
+    # funda_matrix = fundamental_matrix(q)
+    # print(funda_matrix)
+    # with open(f'f matrix {board_num}.txt', 'w') as f:
+    #     f.write(str(funda_matrix))
     # print(f)
 
     #condensation graph
-    # nx.draw(c, with_labels=True, font_weight='bold')
-    # plt.show()
+    nx.draw(c, with_labels=True, font_weight='bold')
+    plt.show()
+
     # while (True):
     #     num = int(input("What is the configuration for this node? "))
     #     if input != "n":
