@@ -9,7 +9,8 @@ from tabulate import tabulate
 # g = nx.Graph("800px", "1100px", directed=True)
 
 """A program to generate graphs where each node represent a game move. The label of each node
-is 1, 2, 3,... instead of the whole board configuration."""
+is 1, 2, 3,... instead of the whole board configuration. This also generates a fundamental
+matrix for each graph."""
 
 def countGreenSliders(board):
     """Count the current number of green sliders on the board."""
@@ -341,6 +342,20 @@ def make_table_dijkstra(tuple):
         table.append([i, tuple[1][len(tuple[1]) - 1 - i]])
     return tabulate(table, headers='firstrow', tablefmt='fancy_grid')
 
+def convert_list_to_matrix(adje_list):
+    """Convert a list in this form {0: {1}, 1: {0, 2}} to an adjacency matrix"""
+    dict_len = len(adje_list)
+    mat = np.zeros((dict_len,dict_len), dtype=int) #initialize a zero matrix
+    # print(mat)
+    for key in adje_list:
+        values = adje_list[key]
+        # print(key)
+        # print(values)
+        list_values = list(values)
+        for i in range(len(list_values)):
+            mat[key][list_values[i]] = 1
+    print(mat)
+
 def main():
     board = [np.array([["G", "I", "-", "-", "-"],
                        ["-", "-", "-", "-", "-"],
@@ -543,7 +558,7 @@ def main():
                        ["-", "-", "I", "-", "-"],
                        ["-", "I", "-", "-", "-"]])]
 
-    board_num = 40
+    board_num = 18
     moves = [board[board_num - 1]]
     #Dijkstra's algorithms
     edges = []
@@ -554,7 +569,7 @@ def main():
     g = net.Network("800px", "1100px", directed=True)
     g.add_node(0, color='#00ff1e')
     tiltRecursive(dict_nodes_edges, board[board_num - 1], moves, g, edges, node_end)
-    print(f"{node_end}")
+    # print(f"{node_end}")
 
     #Dijkstra's algorithms
     # print("Starting -> Winning: \n", end="")
@@ -594,14 +609,21 @@ def main():
     #         # g.add_edge(values, values, title="L")
         
     adj_list = g.get_adj_list()
-    print(g.get_adj_list())
+    print(adj_list)
     for key in adj_list:
         values = adj_list[key]
         if len(values) == 0:
-            print(f"{key} is valid")
+            # print(f"{key} is valid")
             g.add_edge(key, key, title="L")   
 
     # g.show(f"card #{board_num}.html")
+
+    # get adjacency matrix
+    convert_list_to_matrix(adj_list)
+    
+    #to check whether the new edge is added
+    adj_list = g.get_adj_list()
+    print(adj_list)
 
     #make a table: one column is number 0, 1, 2,...; and the other column is the board configuration
     # print(make_table(dict_nodes_edges))

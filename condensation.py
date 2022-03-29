@@ -494,7 +494,7 @@ def main():
                        ["-", "-", "I", "-", "-"],
                        ["-", "I", "-", "-", "-"]])]
 
-    board_num = 9
+    board_num = 1
     moves = [board[board_num - 1]]
     g = nx.DiGraph()
     g.add_node(0, color='#00ff1e')
@@ -539,9 +539,18 @@ def main():
     #     f.write(str(funda_matrix))
     # print(f)
 
+    # adj_matrix = nx.to_numpy_matrix(g)
+    # print(adj_matrix)
+    
+    # for key in adj_list:
+    #     values = adj_list[key]
+    #     if len(values) == 0:
+    #         print(f"{key} is valid")
+    #         g.add_edge(key, key, title="L")   
+
     #condensation graph
     nx.draw(c, with_labels=True, font_weight='bold')
-    plt.show()
+    # plt.show()
 
     # while (True):
     #     num = int(input("What is the configuration for this node? "))
