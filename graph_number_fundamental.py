@@ -368,12 +368,12 @@ def transition_matrix(adj_matrix):
     T = np.dot(np.linalg.inv(D),adj_matrix)
     return T
 
-def fundamental_matrix(Q):
-    """Calculate the fundamental matrix. Source: 
+def fundamental_matrix(q):
+    """Calculate the fundamental matrix with matrix q as the parameter. Source: 
     https://stackoverflow.com/questions/11705733/best-way-to-calculate-the-fundamental-matrix-of-an-absorbing-markov-chain"""
-    I = np.identity(Q.shape[0]) #get the identity matrix that has the same shape as the matrix Q.
+    I = np.identity(q.shape[0]) #get the identity matrix that has the same shape as the matrix Q.
     # o = np.ones(Q.shape[0])
-    F = np.linalg.inv(I-Q)
+    F = np.linalg.inv(I-q)
     return F
 
 def main():
@@ -618,12 +618,15 @@ def main():
     #Calculate the fundamental matrix
     np.set_printoptions(linewidth=np.inf)
     t = transition_matrix(adj_matrix)
-    print(t)
+    print(f"The transition matrix is: \n{t}")
     # drop the absorbing state
     for i in node_end:
         q = np.delete(t, int(i), 0)
         q = np.delete(q, int(i), 1)
-    print(q)
+    print(f"The matrix q is \n {q}")
+    #calculate the fundamental matrix
+    f = fundamental_matrix(q)
+    print(f"The fundamental matrix is \n {f}")
 
     #to check whether the new edge is added
     # adj_list = g.get_adj_list()
