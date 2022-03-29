@@ -354,7 +354,27 @@ def convert_list_to_matrix(adje_list):
         list_values = list(values)
         for i in range(len(list_values)):
             mat[key][list_values[i]] = 1
-    print(mat)
+    return mat
+
+def transition_matrix(adj_matrix):
+    """A method that generates a transition matrix for a graph of a game card. In a transition matrix,
+    each entry at a position (i,j) corresponding to a probability to transition from node i to node j.
+    Source: https://stackoverflow.com/questions/37311651/get-node-list-from-random-walk-in-networkx"""   
+
+    # let's evaluate the degree matrix D
+    D = np.diag(np.sum(adj_matrix, axis=1))
+
+    # ...and the transition matrix T. T = D^(-1) A. 
+    T = np.dot(np.linalg.inv(D),adj_matrix)
+    return T
+
+def fundamental_matrix(Q):
+    """Calculate the fundamental matrix. Source: 
+    https://stackoverflow.com/questions/11705733/best-way-to-calculate-the-fundamental-matrix-of-an-absorbing-markov-chain"""
+    I = np.identity(Q.shape[0]) #get the identity matrix that has the same shape as the matrix Q.
+    # o = np.ones(Q.shape[0])
+    F = np.linalg.inv(I-Q)
+    return F
 
 def main():
     board = [np.array([["G", "I", "-", "-", "-"],
@@ -558,7 +578,7 @@ def main():
                        ["-", "-", "I", "-", "-"],
                        ["-", "I", "-", "-", "-"]])]
 
-    board_num = 18
+    board_num = 5
     moves = [board[board_num - 1]]
     #Dijkstra's algorithms
     edges = []
@@ -581,32 +601,6 @@ def main():
     # print(dict_nodes_edges)
 
     # get adjacency list. This is to add a loop to any node that does not have an outgoing edge.
-    
-    # adj_list = g.get_adj_list()
-    # print(g.get_adj_list())
-    # for key in adj_list:
-    #     values = adj_list[key]
-    #     if len(values) == 1:
-    #         if (key != 0) and (list(values)[0] != key):
-    #             #to determine whether this key apear in any other value 
-    #             #that has the key that is the same as the former key's value.
-    #             #ex: 9: {10}, 10: {9}. Compare 9
-    #             val_compare = adj_list[list(values)[0]] #get the value
-    #             print(key)
-    #             print(list(val_compare))
-    #             # print(f"length is {len(list(val_compare))}")
-    #             flag = 0
-    #             for vals in range(len(list(val_compare))): #need to iterate because it can be 9: {10}, 10: {8, 9}
-    #                 # print(f"vals is {vals}")
-    #                 if (key != list(val_compare)[vals]):  #if they are not the same, print out the value
-    #                     flag = 0
-    #                 elif (key == list(val_compare)[vals]):
-    #                     flag = 1
-    #                     break
-    #             # print(f"element is {list(val_compare)[vals]}")
-    #             if flag == 0:
-    #                 print(f"{key} is valid")
-    #         # g.add_edge(values, values, title="L")
         
     adj_list = g.get_adj_list()
     print(adj_list)
@@ -619,11 +613,21 @@ def main():
     # g.show(f"card #{board_num}.html")
 
     # get adjacency matrix
-    convert_list_to_matrix(adj_list)
-    
+    adj_matrix = convert_list_to_matrix(adj_list)
+
+    #Calculate the fundamental matrix
+    np.set_printoptions(linewidth=np.inf)
+    t = transition_matrix(adj_matrix)
+    print(t)
+    # drop the absorbing state
+    for i in node_end:
+        q = np.delete(t, int(i), 0)
+        q = np.delete(q, int(i), 1)
+    print(q)
+
     #to check whether the new edge is added
-    adj_list = g.get_adj_list()
-    print(adj_list)
+    # adj_list = g.get_adj_list()
+    # print(adj_list)
 
     #make a table: one column is number 0, 1, 2,...; and the other column is the board configuration
     # print(make_table(dict_nodes_edges))
