@@ -623,7 +623,7 @@ def main():
     for i in node_end:
         q = np.delete(t, int(i), 0)
         q = np.delete(q, int(i), 1)
-    print(f"The matrix q is \n {q}")
+    print(f"The matrix q is: \n {q}")
     #calculate the fundamental matrix
     f = fundamental_matrix(q)
     print(f"The fundamental matrix is \n {f}")
