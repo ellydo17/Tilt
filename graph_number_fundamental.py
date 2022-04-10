@@ -578,7 +578,7 @@ def main():
                        ["-", "-", "I", "-", "-"],
                        ["-", "I", "-", "-", "-"]])]
 
-    board_num = 5
+    board_num = 9
     moves = [board[board_num - 1]]
     #Dijkstra's algorithms
     edges = []
@@ -603,7 +603,7 @@ def main():
     # get adjacency list. This is to add a loop to any node that does not have an outgoing edge.
         
     adj_list = g.get_adj_list()
-    print(adj_list)
+    # print(adj_list)
     for key in adj_list:
         values = adj_list[key]
         if len(values) == 0:
@@ -614,19 +614,59 @@ def main():
 
     # get adjacency matrix
     adj_matrix = convert_list_to_matrix(adj_list)
+    # print(f"The adjacency matrix is: \n{adj_matrix}") 
 
     #Calculate the fundamental matrix
     np.set_printoptions(linewidth=np.inf)
     t = transition_matrix(adj_matrix)
-    print(f"The transition matrix is: \n{t}")
-    # drop the absorbing state
-    for i in node_end:
-        q = np.delete(t, int(i), 0)
-        q = np.delete(q, int(i), 1)
-    print(f"The matrix q is: \n {q}")
-    #calculate the fundamental matrix
-    f = fundamental_matrix(q)
-    print(f"The fundamental matrix is \n {f}")
+    t_round = np.round(t, 2) #round each entry in the matrix to 2 decimals
+    print(f"The transition matrix is: \n{t_round}")
+
+    # drop the absorbing state, for cards have NO losing absorbing states
+    # for i in node_end:
+    #     q = np.delete(t_round, int(i), 0)
+    #     q = np.delete(q, int(i), 1)
+    # print(f"The matrix q is: \n {q}")
+
+    #Calculate the fundamental matrix for cards have NO losing absorbing states
+    # f = fundamental_matrix(q)
+    # print(f"The fundamental matrix is \n {f}")
+
+    # -----------------------------------------------------------
+    # Edit the fundamental matrix for cards have losing absorbing states,
+    # first delete rows and columns of nodes that we want to condense
+    # -----------------------------------------------------------
+    # card 9
+    t_delete_column = np.delete(t_round, [4, 5, 6, 7], 1)
+    t_delete = np.delete(t_delete_column, [4, 5, 6, 7], 0)
+
+    print(f"The deleted matrix is: \n{t_delete}")
+    columns = t_delete.shape[1]
+    for cell in range(columns):
+        t_delete[0][cell] = 0
+        t_delete[3][cell] = 0
+    t_delete[0][1] = 0.5 #update new probabilities with condensed nodes
+    t_delete[3][2] = 0.5 #update new probabilities with condensed nodes
+    t_delete_q_column = np.delete(t_delete, columns - 1, 1) #drop the absorbing state
+    t_delete_q = np.delete(t_delete_q_column, columns - 1, 0) #drop the absorbing state
+    print(t_delete_q)
+
+    #Calculate the fundamental matrix for cards no losing absorbing states
+    f = fundamental_matrix(t_delete_q)
+    f_round = np.round(f, 2)
+    print(f"The fundamental matrix is \n {f_round}")
+
+    #Calculate the expected step to the absorbing state
+    """The expected number of steps before being absorbed when starting in 
+    transient state i is the ith entry of the vector t=N1, where 1 is a 
+    length-t column vector whose entries are all 1. Source: 
+    https://en.wikipedia.org/wiki/Absorbing_Markov_chain"""
+    # num_row = f.shape[0]
+    # arr_ones = np.ones((num_row, 1)) #create an array of ones
+
+    #Array to calculate expected number of steps
+    # E = np.matmul(f, arr_ones)
+    # print(f"Matrix to calculate the expected number of steps is:\n {E}")
 
     #to check whether the new edge is added
     # adj_list = g.get_adj_list()
