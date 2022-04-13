@@ -494,7 +494,7 @@ def main():
                        ["-", "-", "I", "-", "-"],
                        ["-", "I", "-", "-", "-"]])]
 
-    board_num = 5
+    board_num = 31
     moves = [board[board_num - 1]]
     g = nx.DiGraph()
     g.add_node(0, color='#00ff1e')
@@ -516,6 +516,10 @@ def main():
         i += 1
     print(dict_node_condense)
 
+    #condensation graph
+    nx.draw(c, with_labels=True, font_weight='bold')
+    plt.show()
+
     #make a table: one column is number 0, 1, 2,...; and the other column is the condensation
     # print(make_table(dict_node_condense))
     # with open(f'table condensation {board_num}.txt', 'w') as f:
@@ -535,7 +539,7 @@ def main():
     #     f.write(str(f))
 
     #calculate the fundamental matrix
-    funda_matrix = fundamental_matrix(q)
+    # funda_matrix = fundamental_matrix(q)
     # print(funda_matrix)
     # with open(f'f matrix {board_num}.txt', 'w') as f:
     #     f.write(str(funda_matrix))
@@ -549,10 +553,6 @@ def main():
     #     if len(values) == 0:
     #         print(f"{key} is valid")
     #         g.add_edge(key, key, title="L")   
-
-    #condensation graph
-    nx.draw(c, with_labels=True, font_weight='bold')
-    # plt.show()
 
     # while (True):
     #     num = int(input("What is the configuration for this node? "))
