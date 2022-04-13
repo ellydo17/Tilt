@@ -578,7 +578,7 @@ def main():
                        ["-", "-", "I", "-", "-"],
                        ["-", "I", "-", "-", "-"]])]
 
-    board_num = 39
+    board_num = 40
     moves = [board[board_num - 1]]
     #Dijkstra's algorithms
     edges = []
@@ -650,10 +650,13 @@ def main():
     #print(columns)
     for cell in range(columns):
         t_delete[16, cell] = 0
+        t_delete[101, cell] = 0
+        t_delete[321, cell] = 0
     t_delete[15, 15] = 0.5  #update new probabilities with condensed nodes
     t_delete[101, 102] = 0.5
-    t_delete_q_column = np.delete(t_delete, 92, 1) #drop the absorbing state
-    t_delete_q = np.delete(t_delete_q_column, 92, 0) #drop the absorbing state
+    t_delete[321, 322] = 0
+    t_delete_q_column = np.delete(t_delete, 359, 1) #drop the absorbing state
+    t_delete_q = np.delete(t_delete_q_column, 359, 0) #drop the absorbing state
     print(f"The matrix after dropping absorbing states is: \n{t_delete_q}")
     
     # card 39
