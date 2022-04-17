@@ -359,11 +359,12 @@ def convert_list_to_matrix(adje_list):
 def transition_matrix(adj_matrix):
     """A method that generates a transition matrix for a graph of a game card. In a transition matrix,
     each entry at a position (i,j) corresponding to a probability to transition from node i to node j.
-    Source: https://stackoverflow.com/questions/37311651/get-node-list-from-random-walk-in-networkx"""   
+    Source: https://stackoverflow.com/questions/37311651/get-node-list-from-random-walk-in-networkx
+    Source: https://math.stackexchange.com/questions/1070681/how-to-define-a-transition-matrix-mathematically"""   
 
     # let's evaluate the degree matrix D
     D = np.diag(np.sum(adj_matrix, axis=1))
-
+    # print(f"The degree matrix is \n{D}.")
     # ...and the transition matrix T. T = D^(-1) A. 
     T = np.dot(np.linalg.inv(D),adj_matrix)
     return T
@@ -578,20 +579,25 @@ def main():
                        ["-", "-", "I", "-", "-"],
                        ["-", "I", "-", "-", "-"]])]
 
-    board_num = 35
+    board_num = 24
     moves = [board[board_num - 1]]
     #Dijkstra's algorithms
     edges = []
     node_end = []
 
-    #Generate graphs for all cards
+    # -----------------------------------------------------------
+    # Generate graphs for all cards
+    # -----------------------------------------------------------
     dict_nodes_edges = {'0': str(board[board_num - 1])}
     g = net.Network("800px", "1100px", directed=True)
     g.add_node(0, color='#00ff1e')
     tiltRecursive(dict_nodes_edges, board[board_num - 1], moves, g, edges, node_end)
     # print(f"{node_end}")
 
-    #Dijkstra's algorithms
+    # -----------------------------------------------------------
+    # Dijkstra's algorithms to find the shortest path that leads to victory. The output matches
+    # the solutions behind each challenge card. 
+    # -----------------------------------------------------------
     # print("Starting -> Winning: \n", end="")
     # dijkstra_tuple = (dijkstra(edges, "0", f"{int(node_end[0])}"))
     # print(dijkstra_tuple)
@@ -600,27 +606,39 @@ def main():
     # print(len(moves))
     # print(dict_nodes_edges)
 
-    # get adjacency list. This is to add a loop to any node that does not have an outgoing edge.
-        
+    # -----------------------------------------------------------
+    # 1. Get the adjacency list. 
+    # 2. Then, get the adjacency matrix.
+    # 3. Get the matrix Q by dropping the absorbing states.
+    # 4. Finally, calculate the fundamental matrix. 
+    # -----------------------------------------------------------
+    
+    # get adjacency list. This is to add a loop to any node that does not have an outgoing edge.    
     adj_list = g.get_adj_list()
-    # print(adj_list)
+
+    # get adjacency matrix
+    adj_matrix = convert_list_to_matrix(adj_list)
+    # print(f"The adjacency matrix is {adj_list}")
     for key in adj_list:
         values = adj_list[key]
         if len(values) == 0:
             # print(f"{key} is valid")
-            g.add_edge(key, key, title="L")   
-
+            g.add_edge(key, key, title="L")
+            adj_matrix[key][key] = 1 #change the value of end nodes that are just added a loop to. 
+    print(f"The adjacency matrix is: \n{adj_matrix}") 
     # g.show(f"card #{board_num}.html")
 
-    # get adjacency matrix
-    adj_matrix = convert_list_to_matrix(adj_list)
-    # print(f"The adjacency matrix is: \n{adj_matrix}") 
-
-    #Calculate the fundamental matrix
+    # calculate the fundamental matrix
     np.set_printoptions(linewidth=np.inf)
     t = transition_matrix(adj_matrix)
+    # debug degree matrix
+    D = np.diag(np.sum(adj_matrix, axis=1))
+    columns = D.shape[1]
+    print(f"The degree matrix is \n{D}.")
+    for i in range(columns):
+        print(f"The index for {i} is {D[i][i]}");
     t_round = np.round(t, 2) #round each entry in the matrix to 2 decimals
-    # print(f"The transition matrix is: \n{t_round}")
+    print(f"The transition matrix is: \n{t_round}")
 
     # -----------------------------------------------------------
     # For cards have NO losing absorbing states
@@ -702,25 +720,25 @@ def main():
     # print(f"The matrix after dropping absorbing states is: \n{t_delete_q}")
 
     # card 35
-    t_delete_column = np.delete(t_round, [24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 72, 73, 75, 76, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 138, 139, 140, 155, 156, 174, 175, 193, 194], 1)
-    t_delete = np.delete(t_delete_column, [24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 72, 73, 75, 76, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 138, 139, 140, 155, 156, 174, 175, 193, 194], 0)
-    print(f"The matrix after deleting losing states is: \n{t_delete}")
-    columns = t_delete.shape[1] #get the number of rows and columns
-    # print(columns)
-    for cell in range(columns):
-        t_delete[51, cell] = 0
-        t_delete[52, cell] = 0
-        t_delete[124, cell] = 0
-        t_delete[141, cell] = 0
-        t_delete[148, cell] = 0
-    t_delete[51, 13] = 0.5  #update new probabilities with condensed nodes
-    t_delete[52, 8] = 0.5
-    t_delete[124, 121] = 0.5
-    t_delete[141, 111] = 0.5
-    t_delete[148, 106] = 0.5
-    t_delete_q_column = np.delete(t_delete, 134, 1) #drop the absorbing state
-    t_delete_q = np.delete(t_delete_q_column, 134, 0) #drop the absorbing state
-    print(f"The matrix after dropping absorbing states is: \n{t_delete_q}")
+    # t_delete_column = np.delete(t_round, [24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 72, 73, 75, 76, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 138, 139, 140, 155, 156, 174, 175, 193, 194], 1)
+    # t_delete = np.delete(t_delete_column, [24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 72, 73, 75, 76, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 138, 139, 140, 155, 156, 174, 175, 193, 194], 0)
+    # print(f"The matrix after deleting losing states is: \n{t_delete}")
+    # columns = t_delete.shape[1] #get the number of rows and columns
+    # # print(columns)
+    # for cell in range(columns):
+    #     t_delete[51, cell] = 0
+    #     t_delete[52, cell] = 0
+    #     t_delete[124, cell] = 0
+    #     t_delete[141, cell] = 0
+    #     t_delete[148, cell] = 0
+    # t_delete[51, 13] = 0.5  #update new probabilities with condensed nodes
+    # t_delete[52, 8] = 0.5
+    # t_delete[124, 121] = 0.5
+    # t_delete[141, 111] = 0.5
+    # t_delete[148, 106] = 0.5
+    # t_delete_q_column = np.delete(t_delete, 134, 1) #drop the absorbing state
+    # t_delete_q = np.delete(t_delete_q_column, 134, 0) #drop the absorbing state
+    # print(f"The matrix after dropping absorbing states is: \n{t_delete_q}")
 
     # card 34
     # t_delete_column = np.delete(t_round, [21, 34, 35], 1)
@@ -784,109 +802,52 @@ def main():
     # print(f"The matrix after dropping absorbing states is: \n{t_delete_q}")
     
     # card 24
-    # t_delete_column = np.delete(t_round, [36, 37, 38, 44, 45, 46], 1)
-    # t_delete = np.delete(t_delete_column, [36, 37, 38, 44, 45, 46], 0)
-    # print(f"The matrix after deleting losing states is: \n{t_delete}")
-    # columns = t_delete.shape[1] #get the number of rows and columns
-    # # print(columns)
-    # for cell in range(columns):
-    #     t_delete[50, cell] = 0
-    #     t_delete[35, cell] = 0
-    #     t_delete[32, cell] = 0
-    # t_delete[50, 51] = 0.5 #update new probabilities with condensed nodes
-    # t_delete[35, 34] = 0.5 #update new probabilities with condensed nodes
-    # t_delete[32, 33] = 0.5 #update new probabilities with condensed nodes
-    # t_delete_q_column = np.delete(t_delete, 68, 1) #drop the absorbing state
-    # t_delete_q = np.delete(t_delete_q_column, 68, 0) #drop the absorbing state
-    # print(f"The matrix after dropping absorbing states is: \n{t_delete_q}")
+    t_delete_column = np.delete(t_round, [36, 37, 38, 44, 45, 46, 32, 33, 34, 35, 39, 40, 41, 42, 43, 74], 1)
+    t_delete_q = np.delete(t_delete_column, [36, 37, 38, 44, 45, 46, 32, 33, 34, 35, 39, 40, 41, 42, 43, 74], 0)
+
+    print(f"The matrix after dropping absorbing states is: \n{t_delete_q}")
     
     # card 22
-    # t_delete_column = np.delete(t_round, [10, 11, 17, 18, 23, 24], 1)
-    # t_delete = np.delete(t_delete_column, [10, 11, 17, 18, 23, 24], 0)
-    # print(f"The matrix after deleting losing states is: \n{t_delete}")
-    # columns = t_delete.shape[1] #get the number of rows and columns
-    # # print(columns)
-    # for cell in range(columns):
-    #     t_delete[9, cell] = 0
-    #     t_delete[0, cell] = 0
-    # t_delete[9, 12] = 0.5 #update new probabilities with condensed nodes
-    # t_delete[0, 1] = 1 #update new probabilities with condensed nodes
-    # t_delete_q_column = np.delete(t_delete, 7, 1) #drop the absorbing state
-    # t_delete_q = np.delete(t_delete_q_column, 7, 0) #drop the absorbing state
+    # t_delete_column = np.delete(t_round, [10, 11, 17, 18, 23, 24, 16, 19, 20, 21, 22, 7], 1)
+    # t_delete_q = np.delete(t_delete_column, [10, 11, 17, 18, 23, 24, 16, 19, 20, 21, 22, 7], 0)
+
     # print(f"The matrix after dropping absorbing states is: \n{t_delete_q}")
 
     # card 19
-    # t_delete_column = np.delete(t_round, [16, 17, 18], 1)
-    # t_delete = np.delete(t_delete_column, [16, 17, 18], 0)
-    # print(f"The matrix after deleting losing states is: \n{t_delete}")
-    # columns = t_delete.shape[1] #get the number of rows and columns
-    # # print(columns)
-    # for cell in range(columns):
-    #     t_delete[15, cell] = 0
-    # t_delete[15, 16] = 0.5 #update new probabilities with condensed nodes
-    # t_delete_q_column = np.delete(t_delete, 12, 1) #drop the absorbing state
-    # t_delete_q = np.delete(t_delete_q_column, 12, 0) #drop the absorbing state
+    # t_delete_column = np.delete(t_round, [14, 15, 16, 17, 18, 19, 12], 1)
+    # t_delete_q = np.delete(t_delete_column, [14, 15, 16, 17, 18, 19, 12], 0)
+ 
     # print(f"The matrix after dropping absorbing states is: \n{t_delete_q}")
     
     # card 18
     # t_delete_column = np.delete(t_round, [66, 67, 68, 69, 70, 71, 75, 76, 77, 80, 84], 1) #drop the absorbing state
     # t_delete_q = np.delete(t_delete_column, [66, 67, 68, 69, 70, 71, 75, 76, 77, 80, 84], 0) #drop the absorbing state
 
-    # print(f"The matrix after deleting losing states is: \n{t_delete_q}")
-    # columns = t_delete_q.shape[1] #get the number of rows and columns
-    # # print(columns)
-    # for cell in range(columns):
-    #     t_delete_q[53, cell] = 0
-    # t_delete_q[53, 54] = 0.5 #update new probabilities with condensed nodes
     # print(f"The matrix after dropping absorbing states is: \n{t_delete_q}")
 
     # card 13
-    # t_delete_column = np.delete(t_round, [7, 8, 9, 10, 11, 12], 1)
-    # t_delete = np.delete(t_delete_column, [7, 8, 9, 10, 11, 12], 0)
+    # t_delete_column = np.delete(t_round, [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 36], 1)
+    # t_delete_q = np.delete(t_delete_column, [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 36], 0)
 
-    # print(f"The matrix after deleting losing states is: \n{t_delete}")
-    # columns = t_delete.shape[1] #get the number of rows and columns
-    # # print(columns)
-    # t_delete_q_column = np.delete(t_delete, 30, 1) #drop the absorbing state
-    # t_delete_q = np.delete(t_delete_q_column, 30, 0) #drop the absorbing state
     # print(f"The matrix after dropping absorbing states is: \n{t_delete_q}")
     
     # card 12
-    # t_delete_column = np.delete(t_round, [9, 10], 1)
-    # t_delete = np.delete(t_delete_column, [9, 10], 0)
+    # t_delete_column = np.delete(t_round, [9, 10, 28], 1)
+    # t_delete_q = np.delete(t_delete_column, [9, 10, 28], 0)
 
-    # print(f"The matrix after deleting losing states is: \n{t_delete}")
-    # columns = t_delete.shape[1] #get the number of rows and columns
-    # t_delete_q_column = np.delete(t_delete, 26, 1) #drop the absorbing state
-    # t_delete_q = np.delete(t_delete_q_column, 26, 0) #drop the absorbing state
     # print(f"The matrix after dropping absorbing states is: \n{t_delete_q}")
     
     # card 11
-    # t_delete_column = np.delete(t_round, [16, 17, 18, 19, 20, 21], 1)
-    # t_delete = np.delete(t_delete_column, [16, 17, 18, 19, 20, 21], 0)
+    # t_delete_column = np.delete(t_round, [16, 17, 18, 19, 20, 21, 26], 1)
+    # t_delete_q = np.delete(t_delete_column, [16, 17, 18, 19, 20, 21, 26], 0)
 
-    # print(f"The matrix after deleting losing states is: \n{t_delete}")
-    # columns = t_delete.shape[1] #get the number of rows and columns
-    # # print(columns)
-    # for cell in range(columns):
-    #     t_delete[15, cell] = 0
-    # t_delete[15, 14] = 0.5 #update new probabilities with condensed nodes
-    # t_delete_q_column = np.delete(t_delete, 20, 1) #drop the absorbing state
-    # t_delete_q = np.delete(t_delete_q_column, 20, 0) #drop the absorbing state
     # print(f"The matrix after dropping absorbing states is: \n{t_delete_q}")
 
     # card 9
-    # t_delete_column = np.delete(t_round, [6, 7], 1)
-    # t_delete = np.delete(t_delete_column, [6, 7], 0)
+    # t_delete_column = np.delete(t_round, [4, 5, 6, 7, 16], 1)
+    # t_delete_q = np.delete(t_delete_column, [4, 5, 6, 7, 16], 0)
 
-    # print(f"The matrix after deleting losing states is: \n{t_delete}")
-    # columns = t_delete.shape[1]
-    # for cell in range(columns):
-    #     t_delete[5][cell] = 0
-    # t_delete[5][4] = 0.5 #update new probabilities with condensed nodes
-    # t_delete_q_column = np.delete(t_delete, 14, 1) #drop the absorbing state
-    # t_delete_q = np.delete(t_delete_q_column, 14, 0) #drop the absorbing state
-    # print(t_delete_q)
+    # print(f"The matrix after absorbing (both winning and losing) states is: \n{t_delete_q}")
 
     #Calculate the fundamental matrix for cards no losing absorbing states
     f = fundamental_matrix(t_delete_q)
