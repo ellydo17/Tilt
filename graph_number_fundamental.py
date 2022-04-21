@@ -579,7 +579,7 @@ def main():
                        ["-", "-", "I", "-", "-"],
                        ["-", "I", "-", "-", "-"]])]
 
-    board_num = 38
+    board_num = 36
     moves = [board[board_num - 1]]
     #Dijkstra's algorithms
     edges = []
@@ -661,36 +661,16 @@ def main():
     # -----------------------------------------------------------
     
     # card 40
-    # t_delete_column = np.delete(t_round, [17, 18, 320, 321, 365, 366], 1)
-    # t_delete = np.delete(t_delete_column, [17, 18, 320, 321, 365, 366], 0)
-    # print(f"The matrix after deleting losing states is: \n{t_delete}")
-    # columns = t_delete.shape[1] #get the number of rows and columns
-    # #print(columns)
-    # for cell in range(columns):
-    #     t_delete[16, cell] = 0
-    #     t_delete[101, cell] = 0
-    #     t_delete[321, cell] = 0
-    # t_delete[15, 15] = 0.5  #update new probabilities with condensed nodes
-    # t_delete[101, 102] = 0.5
-    # t_delete[321, 322] = 0
-    # t_delete_q_column = np.delete(t_delete, 359, 1) #drop the absorbing state
-    # t_delete_q = np.delete(t_delete_q_column, 359, 0) #drop the absorbing state
+    # t_delete_column = np.delete(t_round, [17, 18, 320, 321, 365, 366, 363], 1)
+    # t_delete_q = np.delete(t_delete_column, [17, 18, 320, 321, 365, 366, 363], 0)
+
     # print(f"The matrix after dropping absorbing states of card {board_num} is: \n{t_delete_q}")
     
     # card 39
-    t_delete_column = np.delete(t_round, [26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55], 1)
-    t_delete = np.delete(t_delete_column, [26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55], 0)
-    print(f"The matrix after deleting losing states is: \n{t_delete}")
-    columns = t_delete.shape[1] #get the number of rows and columns
-    #print(columns)
-    for cell in range(columns):
-        t_delete[151, cell] = 0
-        t_delete[152, cell] = 0
-    t_delete[151, 152] = 0.5  #update new probabilities with condensed nodes
-    t_delete[152, 151] = 0.5
-    t_delete_q_column = np.delete(t_delete, 92, 1) #drop the absorbing state
-    t_delete_q = np.delete(t_delete_q_column, 92, 0) #drop the absorbing state
-    print(f"The matrix after dropping absorbing states of card {board_num} is: \n{t_delete_q}")
+    # t_delete_column = np.delete(t_round, [26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 181, 182, 183, 180, 122], 1)
+    # t_delete_q = np.delete(t_delete_column, [26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 181, 182, 183, 180, 122], 0)
+
+    # print(f"The matrix after dropping absorbing states of card {board_num} is: \n{t_delete_q}")
 
     
     # card 38
@@ -700,17 +680,10 @@ def main():
     # print(f"The matrix after dropping absorbing states of card {board_num} is: \n{t_delete_q}")
 
     # card 36
-    # t_delete_column = np.delete(t_round, [2, 3, 31, 46, 51, 71, 76, 77, 78, 79, 80], 1)
-    # t_delete = np.delete(t_delete_column, [2, 3, 31, 46, 51, 71, 77, 76, 78, 79, 80], 0)
-    # print(f"The matrix after deleting losing states is: \n{t_delete}")
-    # columns = t_delete.shape[1] #get the number of rows and columns
-    #print(columns)
-    # for cell in range(columns):
-    #     t_delete[32, cell] = 0
-    # t_delete[32, 31] = 0.5  #update new probabilities with condensed nodes
-    # t_delete_q_column = np.delete(t_delete, 41, 1) #drop the absorbing state
-    # t_delete_q = np.delete(t_delete_q_column, 41, 0) #drop the absorbing state
-    # print(f"The matrix after dropping absorbing states of card {board_num} is: \n{t_delete_q}")
+    t_delete_column = np.delete(t_round, [2, 3, 31, 46, 51, 71, 76, 77, 78, 79, 80, 44], 1)
+    t_delete_q = np.delete(t_delete_column, [2, 3, 31, 46, 51, 71, 77, 76, 78, 79, 80, 44], 0)
+
+    print(f"The matrix after dropping absorbing states of card {board_num} is: \n{t_delete_q}")
 
     # card 35
     # t_delete_column = np.delete(t_round, [24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 72, 73, 75, 76, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 138, 139, 140, 155, 156, 174, 175, 193, 194], 1)
