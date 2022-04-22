@@ -579,7 +579,7 @@ def main():
                        ["-", "-", "I", "-", "-"],
                        ["-", "I", "-", "-", "-"]])]
 
-    board_num = 36
+    board_num = 3
     moves = [board[board_num - 1]]
     #Dijkstra's algorithms
     edges = []
@@ -644,14 +644,10 @@ def main():
     # For cards have NO losing absorbing states
     # -----------------------------------------------------------
     # drop the absorbing state, for cards have NO losing absorbing states
-    # for i in node_end:
-    #     q = np.delete(t_round, int(i), 0)
-    #     q = np.delete(q, int(i), 1)
-    # print(f"The matrix q is: \n {q}")
-
-    #Calculate the fundamental matrix for cards have NO losing absorbing states
-    # f = fundamental_matrix(q)
-    # print(f"The fundamental matrix of card {board_num} is \n {f}")
+    for i in node_end:
+        t_delete_q = np.delete(t_round, int(i), 0)
+        t_delete_q = np.delete(t_delete_q, int(i), 1)
+    print(f"The matrix q is: \n {t_delete_q}")
 
     # -----------------------------------------------------------
     # For cards HAVE losing absorbing states
@@ -680,10 +676,10 @@ def main():
     # print(f"The matrix after dropping absorbing states of card {board_num} is: \n{t_delete_q}")
 
     # card 36
-    t_delete_column = np.delete(t_round, [2, 3, 31, 46, 51, 71, 76, 77, 78, 79, 80, 44], 1)
-    t_delete_q = np.delete(t_delete_column, [2, 3, 31, 46, 51, 71, 77, 76, 78, 79, 80, 44], 0)
+    # t_delete_column = np.delete(t_round, [2, 3, 31, 46, 51, 71, 76, 77, 78, 79, 80, 44], 1)
+    # t_delete_q = np.delete(t_delete_column, [2, 3, 31, 46, 51, 71, 77, 76, 78, 79, 80, 44], 0)
 
-    print(f"The matrix after dropping absorbing states of card {board_num} is: \n{t_delete_q}")
+    # print(f"The matrix after dropping absorbing states of card {board_num} is: \n{t_delete_q}")
 
     # card 35
     # t_delete_column = np.delete(t_round, [24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 72, 73, 75, 76, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 138, 139, 140, 155, 156, 174, 175, 193, 194], 1)
