@@ -494,7 +494,7 @@ def main():
                        ["-", "-", "I", "-", "-"],
                        ["-", "I", "-", "-", "-"]])]
 
-    board_num = 31
+    board_num = 40
     moves = [board[board_num - 1]]
     g = nx.DiGraph()
     g.add_node(0, color='#00ff1e')
