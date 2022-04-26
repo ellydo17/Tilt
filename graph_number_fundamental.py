@@ -579,7 +579,7 @@ def main():
                        ["-", "-", "I", "-", "-"],
                        ["-", "I", "-", "-", "-"]])]
 
-    board_num = 3
+    board_num = 36
     moves = [board[board_num - 1]]
     #Dijkstra's algorithms
     edges = []
@@ -659,113 +659,91 @@ def main():
     # card 40
     # t_delete_column = np.delete(t_round, [17, 18, 320, 321, 365, 366, 363], 1)
     # t_delete_q = np.delete(t_delete_column, [17, 18, 320, 321, 365, 366, 363], 0)
-
-    # print(f"The matrix after dropping absorbing states of card {board_num} is: \n{t_delete_q}")
     
     # card 39
     # t_delete_column = np.delete(t_round, [26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 181, 182, 183, 180, 122], 1)
     # t_delete_q = np.delete(t_delete_column, [26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 181, 182, 183, 180, 122], 0)
-
-    # print(f"The matrix after dropping absorbing states of card {board_num} is: \n{t_delete_q}")
-
-    
+   
     # card 38
     # t_delete_column = np.delete(t_round, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 79], 1)
     # t_delete_q = np.delete(t_delete_column, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 79], 0)
- 
-    # print(f"The matrix after dropping absorbing states of card {board_num} is: \n{t_delete_q}")
 
     # card 36
-    # t_delete_column = np.delete(t_round, [2, 3, 31, 46, 51, 71, 76, 77, 78, 79, 80, 44], 1)
-    # t_delete_q = np.delete(t_delete_column, [2, 3, 31, 46, 51, 71, 77, 76, 78, 79, 80, 44], 0)
-
-    # print(f"The matrix after dropping absorbing states of card {board_num} is: \n{t_delete_q}")
+    t_delete_column = np.delete(t_round, [2, 3, 31, 46, 51, 71, 77, 78, 79, 80, 44, 32, 33, 30, 
+    28, 29, 25, 26, 27, 24, 48, 45, 47, 59, 60, 54, 55, 56, 57, 58, 61, 53, 52, 76, 73, 74, 75,
+    72, 70, 68, 69, 80, 79, 66, 67, 64, 65, 63, 62], 1)
+    t_delete_q = np.delete(t_delete_column, [2, 3, 31, 46, 51, 71, 77, 78, 79, 80, 44, 32, 33, 30, 
+    28, 29, 25, 26, 27, 24, 48, 45, 47, 59, 60, 54, 55, 56, 57, 58, 61, 53, 52, 76, 73, 74, 75,
+    72, 70, 68, 69, 80, 79, 66, 67, 64, 65, 63, 62], 0)
 
     # card 35
     # t_delete_column = np.delete(t_round, [24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 72, 73, 75, 76, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 138, 139, 140, 155, 156, 174, 175, 193, 194], 1)
     # t_delete_q = np.delete(t_delete_column, [24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 72, 73, 75, 76, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 138, 139, 140, 155, 156, 174, 175, 193, 194], 0)
 
-    # print(f"The matrix after dropping absorbing states of card {board_num} is: \n{t_delete_q}")
-
     # card 34
     # t_delete_column = np.delete(t_round, [21, 33, 34, 35, 47], 1)
     # t_delete_q = np.delete(t_delete_column, [21, 33, 34, 35, 47], 0)
     
-    # print(f"The matrix after dropping absorbing states of card {board_num} is: \n{t_delete_q}")
-    
     # card 32
     # t_delete_column = np.delete(t_round, [6, 7, 14, 15, 16, 27], 1)
     # t_delete_q = np.delete(t_delete_column, [6, 7, 14, 15, 16, 27], 0)
-
-    # print(f"The matrix after dropping absorbing states of card {board_num} is: \n{t_delete_q}")
     
     # card 31
-    # t_delete_column = np.delete(t_round, [19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 77, 78, 132, 133, 97], 1)
-    # t_delete_q = np.delete(t_delete_column, [19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 77, 78, 132, 133, 97], 0)
-
-    # print(f"The matrix after dropping absorbing states of card {board_num} is: \n{t_delete_q}")
+    # t_delete_column = np.delete(t_round, [19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 
+    # 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 
+    # 58, 59, 60, 61, 62, 63, 64, 65, 77, 78, 132, 133, 97, 17, 18, 12, 13, 14, 15, 16, 66, 11, 69, 
+    # 70, 71, 72, 73, 74, 75, 76, 79, 80, 81, 82, 67, 68, 9, 10, 115, 116, 123, 124, 102, 103, 104, 
+    # 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 117, 118, 119, 120, 121, 122, 125, 126, 127, 
+    # 128, 100, 101, 132, 133, 134, 135, 130, 131], 1)
+    # t_delete_q = np.delete(t_delete_column, [19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 
+    # 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 
+    # 58, 59, 60, 61, 62, 63, 64, 65, 77, 78, 132, 133, 97, 17, 18, 12, 13, 14, 15, 16, 66, 11, 69, 
+    # 70, 71, 72, 73, 74, 75, 76, 79, 80, 81, 82, 67, 68, 9, 10, 115, 116, 123, 124, 102, 103, 104, 
+    # 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 117, 118, 119, 120, 121, 122, 125, 126, 127, 
+    # 128, 100, 101, 132, 133, 134, 135, 130, 131], 0)
     
     # card 28
     # t_delete_column = np.delete(t_round, [20, 21, 73, 74, 75, 89, 93, 98, 99, 100, 91], 1)
     # t_delete_q = np.delete(t_delete_column, [20, 21, 73, 74, 75, 89, 93, 98, 99, 100, 91], 0)
-   
-    # print(f"The matrix after dropping absorbing states of card {board_num} is: \n{t_delete_q}")
     
     # card 25
-    # t_delete_column = np.delete(t_round, [41, 42, 45, 46, 47, 58, 59, 45, 36, 37, 38, 39, 40, 29], 1)
-    # t_delete_q = np.delete(t_delete_column, [41, 42, 45, 46, 47, 58, 59, 45, 36, 37, 38, 39, 40, 29], 0)
-
-    # print(f"The matrix after dropping absorbing states of card {board_num} is: \n{t_delete_q}")
+    # t_delete_column = np.delete(t_round, [41, 42, 46, 47, 58, 59, 45, 36, 37, 38, 39, 40, 29], 1)
+    # t_delete_q = np.delete(t_delete_column, [41, 42, 46, 47, 58, 59, 45, 36, 37, 38, 39, 40, 29], 0)
     
     # card 24
     # t_delete_column = np.delete(t_round, [36, 37, 38, 44, 45, 46, 32, 33, 34, 35, 39, 40, 41, 42, 43, 74], 1)
     # t_delete_q = np.delete(t_delete_column, [36, 37, 38, 44, 45, 46, 32, 33, 34, 35, 39, 40, 41, 42, 43, 74], 0)
-
-    # print(f"The matrix after dropping absorbing states of card {board_num} is: \n{t_delete_q}")
     
     # card 22
     # t_delete_column = np.delete(t_round, [10, 11, 17, 18, 23, 24, 16, 19, 20, 21, 22, 7], 1)
     # t_delete_q = np.delete(t_delete_column, [10, 11, 17, 18, 23, 24, 16, 19, 20, 21, 22, 7], 0)
 
-    # print(f"The matrix after dropping absorbing states of card {board_num} is: \n{t_delete_q}")
-
     # card 19
     # t_delete_column = np.delete(t_round, [14, 15, 16, 17, 18, 19, 12], 1)
     # t_delete_q = np.delete(t_delete_column, [14, 15, 16, 17, 18, 19, 12], 0)
- 
-    # print(f"The matrix after dropping absorbing states of card {board_num} is: \n{t_delete_q}")
     
     # card 18
     # t_delete_column = np.delete(t_round, [66, 67, 68, 69, 70, 71, 75, 76, 77, 80, 84], 1) #drop the absorbing state
     # t_delete_q = np.delete(t_delete_column, [66, 67, 68, 69, 70, 71, 75, 76, 77, 80, 84], 0) #drop the absorbing state
 
-    # print(f"The matrix after dropping absorbing states of card {board_num} is: \n{t_delete_q}")
-
     # card 13
     # t_delete_column = np.delete(t_round, [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 36], 1)
     # t_delete_q = np.delete(t_delete_column, [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 36], 0)
-
-    # print(f"The matrix after dropping absorbing states of card {board_num} is: \n{t_delete_q}")
     
     # card 12
     # t_delete_column = np.delete(t_round, [9, 10, 28], 1)
     # t_delete_q = np.delete(t_delete_column, [9, 10, 28], 0)
-
-    # print(f"The matrix after dropping absorbing states of card {board_num} is: \n{t_delete_q}")
     
     # card 11
     # t_delete_column = np.delete(t_round, [16, 17, 18, 19, 20, 21, 26], 1)
     # t_delete_q = np.delete(t_delete_column, [16, 17, 18, 19, 20, 21, 26], 0)
 
-    # print(f"The matrix after dropping absorbing states of card {board_num} is: \n{t_delete_q}")
-
     # card 9
     # t_delete_column = np.delete(t_round, [4, 5, 6, 7, 16], 1)
     # t_delete_q = np.delete(t_delete_column, [4, 5, 6, 7, 16], 0)
 
-    # print(f"The matrix after dropping absorbing states of card {board_num} is: \n{t_delete_q}")
-
     #Calculate the fundamental matrix for cards no losing absorbing states
+    print(f"The matrix after dropping absorbing states of card {board_num} is: \n{t_delete_q}")
     f = fundamental_matrix(t_delete_q)
     f_round = np.round(f, 2)
     print(f"The fundamental matrix of card {board_num} is \n {f_round}")
