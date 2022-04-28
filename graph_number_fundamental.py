@@ -377,6 +377,17 @@ def fundamental_matrix(q):
     F = np.linalg.inv(I-q)
     return F
 
+def delete_column_q(num_column, deleted_row):
+    """Delete the column of the transition matrix to get the matrix R"""
+    deleted_column = []
+    for i in range(num_column):
+        deleted_column.append(i)
+    for itemRow in deleted_row:
+        for itemCol in deleted_column:
+            if itemRow == itemCol:
+                deleted_column.remove(itemRow)
+    return deleted_column
+
 def main():
     board = [np.array([["G", "I", "-", "-", "-"],
                        ["-", "-", "-", "-", "-"],
@@ -579,7 +590,7 @@ def main():
                        ["-", "-", "I", "-", "-"],
                        ["-", "I", "-", "-", "-"]])]
 
-    board_num = 40
+    board_num = 1
     moves = [board[board_num - 1]]
     #Dijkstra's algorithms
     edges = []
@@ -610,7 +621,6 @@ def main():
     # 1. Get the adjacency list. 
     # 2. Then, get the adjacency matrix.
     # 3. Get the matrix Q by dropping the absorbing states.
-    # 4. Finally, calculate the fundamental matrix. 
     # -----------------------------------------------------------
     
     # get adjacency list. This is to add a loop to any node that does not have an outgoing edge.    
@@ -633,9 +643,9 @@ def main():
     t = transition_matrix(adj_matrix)
     # debug degree matrix
     D = np.diag(np.sum(adj_matrix, axis=1))
-    columns = D.shape[1]
+    num_column = D.shape[1]
     print(f"The degree matrix of card {board_num} is \n{D}.")
-    # for i in range(columns):
+    # for i in range(num_column):
     #     print(f"The index for {i} is {D[i][i]}");
     t_round = np.round(t, 2) #round each entry in the matrix to 2 decimals
     print(f"The transition matrix of card {board_num} is: \n{t_round}")
@@ -643,11 +653,16 @@ def main():
     # -----------------------------------------------------------
     # For cards have NO losing absorbing states
     # -----------------------------------------------------------
-    # drop the absorbing state, for cards have NO losing absorbing states
-    for i in node_end:
-        t_delete_q = np.delete(t_round, int(i), 0)
-        t_delete_q = np.delete(t_delete_q, int(i), 1)
-    print(f"The matrix q is: \n {t_delete_q}")
+    # Drop the absorbing state to get the matrix Q, for cards have NO losing absorbing states. 
+    node_end_int = list(map(int, node_end))
+
+    t_delete_q = np.delete(t_round, node_end_int, 0)
+    t_delete_q = np.delete(t_delete_q, node_end_int, 1)
+
+    # Get the matrix R
+    t_delete_row = np.delete(t_round, node_end_int, 0)
+    deleted_column = delete_column_q(num_column, node_end_int)
+    t_delete_column = np.delete(t_delete_row, deleted_column, 1)
 
     # -----------------------------------------------------------
     # For cards HAVE losing absorbing states
@@ -657,28 +672,28 @@ def main():
     # -----------------------------------------------------------
     
     # card 40
-    t_delete_column = np.delete(t_round, [17, 18, 320, 321, 365, 366, 363, 20, 21, 22, 23, 24, 25,
-     26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 
-     49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 
-     72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 
-     95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 106, 105, 19, 16, 15, 13, 14, 11, 12, 3, 4, 5, 
-     6, 7, 8, 9, 10, 2, 107, 108, 1, 320, 321, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 
-     271, 272, 273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 
-     289, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306, 
-     307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319, 322, 323, 324, 325, 326, 
-     327, 328, 329, 330, 331, 332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 
-     345, 346, 347, 365, 366], 1)
-    t_delete_q = np.delete(t_delete_column, [17, 18, 320, 321, 365, 366, 363, 20, 21, 22, 23, 24, 25,
-     26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 
-     49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 
-     72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 
-     95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 106, 105, 19, 16, 15, 13, 14, 11, 12, 3, 4, 5, 
-     6, 7, 8, 9, 10, 2, 107, 108, 1, 320, 321, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 
-     271, 272, 273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 
-     289, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306, 
-     307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319, 322, 323, 324, 325, 326, 
-     327, 328, 329, 330, 331, 332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 
-     345, 346, 347, 365, 366], 0)
+    # t_delete_column = np.delete(t_round, [17, 18, 320, 321, 365, 366, 363, 20, 21, 22, 23, 24, 25,
+    #  26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 
+    #  49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 
+    #  72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 
+    #  95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 106, 105, 19, 16, 15, 13, 14, 11, 12, 3, 4, 5, 
+    #  6, 7, 8, 9, 10, 2, 107, 108, 1, 320, 321, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 
+    #  271, 272, 273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 
+    #  289, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306, 
+    #  307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319, 322, 323, 324, 325, 326, 
+    #  327, 328, 329, 330, 331, 332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 
+    #  345, 346, 347, 365, 366], 1)
+    # t_delete_q = np.delete(t_delete_column, [17, 18, 320, 321, 365, 366, 363, 20, 21, 22, 23, 24, 25,
+    #  26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 
+    #  49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 
+    #  72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 
+    #  95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 106, 105, 19, 16, 15, 13, 14, 11, 12, 3, 4, 5, 
+    #  6, 7, 8, 9, 10, 2, 107, 108, 1, 320, 321, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 
+    #  271, 272, 273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 
+    #  289, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306, 
+    #  307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319, 322, 323, 324, 325, 326, 
+    #  327, 328, 329, 330, 331, 332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 
+    #  345, 346, 347, 365, 366], 0)
     
     # card 39
     # t_delete_column = np.delete(t_round, [26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 
@@ -761,16 +776,28 @@ def main():
     # t_delete_q = np.delete(t_delete_column, [16, 17, 18, 19, 20, 21, 26], 0)
 
     # card 9
+    # the matrix Q
     # t_delete_column = np.delete(t_round, [4, 5, 6, 7, 16], 1)
     # t_delete_q = np.delete(t_delete_column, [4, 5, 6, 7, 16], 0)
 
-    #Calculate the fundamental matrix for cards no losing absorbing states
-    print(f"The matrix after dropping absorbing states of card {board_num} is: \n{t_delete_q}")
-    f = fundamental_matrix(t_delete_q)
-    f_round = np.round(f, 2)
-    print(f"The fundamental matrix of card {board_num} is \n {f_round}")
+    # the matrix R
+    # deleted_row = [4, 5, 6, 7, 16]
+    # t_delete_row = np.delete(t_round, deleted_row, 0)
+    # deleted_column = (delete_column_q(num_column, deleted_row))
+    # t_delete_column = np.delete(t_delete_row, deleted_column, 1)
 
-    #Calculate the expected step to the absorbing state
+    # -----------------------------------------------------------
+    # Calculate the fundamental matrix for cards no losing absorbing states
+    # -----------------------------------------------------------
+    print(f"The matrix after dropping absorbing states of card {board_num} is: \n{t_delete_q}")
+    print(f"The matrix R of card {board_num} is \n{t_delete_column}")
+
+    # f = fundamental_matrix(t_delete_q)
+    # f_round = np.round(f, 2)
+    # print(f"The fundamental matrix of card {board_num} is \n {f_round}")
+
+    # -----------------------------------------------------------
+    # Calculate the expected step to the absorbing state
     """The expected number of steps before being absorbed when starting in 
     transient state i is the ith entry of the vector t=N1, where 1 is a 
     length-t column vector whose entries are all 1. Source: 
@@ -778,11 +805,17 @@ def main():
     # num_row = f.shape[0]
     # arr_ones = np.ones((num_row, 1)) #create an array of ones
 
-    #Array to calculate expected number of steps
+    # # Array to calculate expected number of steps
     # E = np.matmul(f, arr_ones)
-    # print(f"Matrix to calculate the expected number of steps is:\n {E}")
+    # print(f"Matrix to calculate the expected number of steps for card {board_num} is:\n {E}")
 
-    #to check whether the new edge is added
+    # -----------------------------------------------------------
+    # Calculate the probability of absoprtion given that the process starts in nonabsorbing
+    # state. B = F.R
+    # -----------------------------------------------------------
+    """B = F.R"""
+
+    # # to check whether the new edge is added
     # adj_list = g.get_adj_list()
     # print(adj_list)
 
