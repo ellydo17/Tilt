@@ -672,7 +672,8 @@ def main():
     # -----------------------------------------------------------
     
     # card 40
-    # t_delete_column = np.delete(t_round, [17, 18, 320, 321, 365, 366, 363, 20, 21, 22, 23, 24, 25,
+    # the matrix Q
+    # deleted_row = [17, 18, 320, 321, 365, 366, 363, 20, 21, 22, 23, 24, 25,
     #  26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 
     #  49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 
     #  72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 
@@ -682,24 +683,16 @@ def main():
     #  289, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306, 
     #  307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319, 322, 323, 324, 325, 326, 
     #  327, 328, 329, 330, 331, 332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 
-    #  345, 346, 347, 365, 366], 1)
-    # t_delete_q = np.delete(t_delete_column, [17, 18, 320, 321, 365, 366, 363, 20, 21, 22, 23, 24, 25,
-    #  26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 
-    #  49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 
-    #  72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 
-    #  95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 106, 105, 19, 16, 15, 13, 14, 11, 12, 3, 4, 5, 
-    #  6, 7, 8, 9, 10, 2, 107, 108, 1, 320, 321, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 
-    #  271, 272, 273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 
-    #  289, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306, 
-    #  307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319, 322, 323, 324, 325, 326, 
-    #  327, 328, 329, 330, 331, 332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 
-    #  345, 346, 347, 365, 366], 0)
+    #  345, 346, 347, 365, 366]
+    # t_delete_column = np.delete(t_round, deleted_row, 1)
+    # t_delete_q = np.delete(t_delete_column, deleted_row, 0)
     
     # card 39
-    # t_delete_column = np.delete(t_round, [26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 
-    # 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 181, 182, 183, 180, 122], 1)
-    # t_delete_q = np.delete(t_delete_column, [26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 
-    # 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 181, 182, 183, 180, 122], 0)
+    # the matrix Q
+    # deleted_row = [26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 
+    # 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 181, 182, 183, 180, 122]
+    # t_delete_column = np.delete(t_round, deleted_row, 1)
+    # t_delete_q = np.delete(t_delete_column, deleted_row, 0)
    
     # card 38
     # the matrix Q
@@ -717,7 +710,7 @@ def main():
 
     # card 35
     # the matrix Q
-    # deleted_row = [24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 72, 73, 75, 76, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 138, 139, 140, 155, 156, 174, 175, 193, 194]
+    # deleted_row = [24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 72, 73, 75, 76, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 139, 140, 155, 156, 174, 175, 193, 194, 138, 185]
     # t_delete_column = np.delete(t_round, deleted_row, 1)
     # t_delete_q = np.delete(t_delete_column, deleted_row, 0)
 
@@ -775,7 +768,7 @@ def main():
     # t_delete_q = np.delete(t_delete_column, deleted_row, 0)
     
     # card 18
-    # # the matrix Q
+    # the matrix Q
     # deleted_row = [66, 67, 68, 69, 70, 71, 75, 76, 77, 80, 84]
     # t_delete_column = np.delete(t_round, deleted_row, 1) #drop the absorbing state
     # t_delete_q = np.delete(t_delete_column, deleted_row, 0) #drop the absorbing state
@@ -800,16 +793,16 @@ def main():
 
     # card 9
     # the matrix Q
-    # deleted_row = [4, 5, 6, 7, 16]
-    # t_delete_column = np.delete(t_round, deleted_row, 1)
-    # t_delete_q = np.delete(t_delete_column, deleted_row, 0)
+    deleted_row = [4, 5, 6, 7, 16]
+    t_delete_column = np.delete(t_round, deleted_row, 1)
+    t_delete_q = np.delete(t_delete_column, deleted_row, 0)
 
     # -----------------------------------------------------------
     # Calculate the matrix R for cards no losing absorbing states
     # -----------------------------------------------------------
-    # t_delete_row = np.delete(t_round, deleted_row, 0)
-    # deleted_column = (delete_column_q(num_column, deleted_row))
-    # t_delete_column = np.delete(t_delete_row, deleted_column, 1)
+    t_delete_row = np.delete(t_round, deleted_row, 0)
+    deleted_column = (delete_column_q(num_column, deleted_row))
+    t_delete_column = np.delete(t_delete_row, deleted_column, 1)
 
     # -----------------------------------------------------------
     # Calculate the fundamental matrix for cards no losing absorbing states
