@@ -654,15 +654,15 @@ def main():
     # For cards have NO losing absorbing states
     # -----------------------------------------------------------
     # Drop the absorbing state to get the matrix Q, for cards have NO losing absorbing states. 
-    # node_end_int = list(map(int, node_end))
+    node_end_int = list(map(int, node_end))
 
-    # t_delete_q = np.delete(t_round, node_end_int, 0)
-    # t_delete_q = np.delete(t_delete_q, node_end_int, 1)
+    t_delete_q = np.delete(t_round, node_end_int, 0)
+    t_delete_q = np.delete(t_delete_q, node_end_int, 1)
 
-    # # Get the matrix R
-    # t_delete_row = np.delete(t_round, node_end_int, 0)
-    # deleted_column = delete_column_q(num_column, node_end_int)
-    # t_delete_column = np.delete(t_delete_row, deleted_column, 1)
+    # Get the matrix R
+    t_delete_row = np.delete(t_round, node_end_int, 0)
+    deleted_column = delete_column_q(num_column, node_end_int)
+    t_delete_column = np.delete(t_delete_row, deleted_column, 1)
 
     # -----------------------------------------------------------
     # For cards HAVE losing absorbing states
@@ -798,17 +798,33 @@ def main():
     t_delete_q = np.delete(t_delete_column, deleted_row, 0)
 
     # -----------------------------------------------------------
-    # Calculate the matrix R for cards no losing absorbing states
+    # Calculate the matrix R for cards no losing absorbing states. 
     # -----------------------------------------------------------
+    deleted_column_for_R = []
+    matrix_R = []
+
+    # first, get the matrix that has all absorbing nodes (winning and losing)
     t_delete_row = np.delete(t_round, deleted_row, 0)
     deleted_column = (delete_column_q(num_column, deleted_row))
     t_delete_column = np.delete(t_delete_row, deleted_column, 1)
 
+    # get the column of the losing absorbing states and sum all column of losing absorbing states
+    t_delete_column_for_losing = np.delete(t_delete_column, len(deleted_row) - 1, 1)
+    t_sum_for_losing=np.sum(t_delete_column_for_losing,axis=1)  
+    print(f"t_sum_for_losing is \n{t_sum_for_losing}")
+    t_sum_for_losing_transpose=t_sum_for_losing.reshape((-1,1))
+    print(f"the transpose matrix is \n{t_sum_for_losing_transpose}")
+
+    # get the column of the winning absorbing states
+    for i in range(len(deleted_row)-1):
+        deleted_column_for_R.append(i)
+        t_delete_column_for_winning = np.delete(t_delete_column, deleted_column_for_R, 1)
+    matrix_R = np.append(t_sum_for_losing_transpose, t_delete_column_for_winning, 1)    
     # -----------------------------------------------------------
     # Calculate the fundamental matrix for cards no losing absorbing states
     # -----------------------------------------------------------
     print(f"The matrix after dropping absorbing states of card {board_num} is: \n{t_delete_q}")
-    print(f"The matrix R of card {board_num} is \n{t_delete_column}")
+    print(f"The matrix R of card {board_num} is \n{matrix_R}")
 
     f = fundamental_matrix(t_delete_q)
     f_round = np.round(f, 2)
