@@ -590,7 +590,7 @@ def main():
                        ["-", "-", "I", "-", "-"],
                        ["-", "I", "-", "-", "-"]])]
 
-    board_num = 9
+    board_num = 19
     moves = [board[board_num - 1]]
     #Dijkstra's algorithms
     edges = []
@@ -763,9 +763,9 @@ def main():
 
     # card 19
     # the matrix Q
-    # deleted_row = [14, 15, 16, 17, 18, 19, 12]
-    # t_delete_column = np.delete(t_round, deleted_row, 1)
-    # t_delete_q = np.delete(t_delete_column, deleted_row, 0)
+    deleted_row = [14, 15, 16, 17, 18, 19, 12]
+    t_delete_column = np.delete(t_round, deleted_row, 1)
+    t_delete_q = np.delete(t_delete_column, deleted_row, 0)
     
     # card 18
     # the matrix Q
@@ -793,9 +793,9 @@ def main():
 
     # card 9
     # the matrix Q
-    deleted_row = [4, 5, 6, 7, 16]
-    t_delete_column = np.delete(t_round, deleted_row, 1)
-    t_delete_q = np.delete(t_delete_column, deleted_row, 0)
+    # deleted_row = [4, 5, 6, 7, 16]
+    # t_delete_column = np.delete(t_round, deleted_row, 1)
+    # t_delete_q = np.delete(t_delete_column, deleted_row, 0)
 
     # -----------------------------------------------------------
     # Calculate the matrix R for cards no losing absorbing states. 
@@ -803,23 +803,29 @@ def main():
     deleted_column_for_R = []
     matrix_R = []
 
-    # first, get the matrix that has all absorbing nodes (winning and losing)
-    t_delete_row = np.delete(t_round, deleted_row, 0)
+    # first, get the matrix that resembles matrix R in the canonical form but the losing absorbing states
+    # are not summed up yet
+    r_delete_row = np.delete(t_round, deleted_row, 0) #delete the absorbing columns
     deleted_column = (delete_column_q(num_column, deleted_row))
-    t_delete_column = np.delete(t_delete_row, deleted_column, 1)
+    r_delete_column = np.delete(r_delete_row, deleted_column, 1) #delete the nonabsorbing rows
+    print(f"The matrix that resembles matrix R but the losing absorbing states are not summed up yet is \n{r_delete_column}")
 
     # get the column of the losing absorbing states and sum all column of losing absorbing states
-    t_delete_column_for_losing = np.delete(t_delete_column, len(deleted_row) - 1, 1)
-    t_sum_for_losing=np.sum(t_delete_column_for_losing,axis=1)  
-    print(f"t_sum_for_losing is \n{t_sum_for_losing}")
-    t_sum_for_losing_transpose=t_sum_for_losing.reshape((-1,1))
-    print(f"the transpose matrix is \n{t_sum_for_losing_transpose}")
+    r_delete_column_for_losing = np.delete(r_delete_column, len(deleted_row) - 1, 1)
+    # print(f"r_delete_column_for_losing is \n{r_delete_column_for_losing}")
+    r_sum_for_losing=np.sum(r_delete_column_for_losing,axis=1)  
+    r_sum_for_losing_transpose=r_sum_for_losing.reshape((-1,1)) #tranpose because r_sum_for_losing is horizontal
+    print(f"The sum of all column of losing absorbing states is \n{r_sum_for_losing_transpose}")
 
     # get the column of the winning absorbing states
     for i in range(len(deleted_row)-1):
         deleted_column_for_R.append(i)
-        t_delete_column_for_winning = np.delete(t_delete_column, deleted_column_for_R, 1)
-    matrix_R = np.append(t_sum_for_losing_transpose, t_delete_column_for_winning, 1)    
+        r_delete_column_for_winning = np.delete(r_delete_column, deleted_column_for_R, 1)
+    # print(f"t_delete_column_for_winning is \n{r_delete_column_for_winning}")
+
+    # append the losing and winning states together
+    matrix_R = np.append(r_sum_for_losing_transpose, r_delete_column_for_winning, 1)    
+
     # -----------------------------------------------------------
     # Calculate the fundamental matrix for cards no losing absorbing states
     # -----------------------------------------------------------
@@ -848,7 +854,7 @@ def main():
     # state. B = F.R
     # -----------------------------------------------------------
     """B = F.R"""
-    B = np.matmul(f_round, t_delete_column)
+    B = np.matmul(f_round, r_delete_column)
     print(f"The matrix B of card {board_num} is \n {B}")
 
     # # to check whether the new edge is added
