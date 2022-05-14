@@ -590,7 +590,7 @@ def main():
                        ["-", "-", "I", "-", "-"],
                        ["-", "I", "-", "-", "-"]])]
 
-    board_num = 18
+    board_num = 31
     moves = [board[board_num - 1]]
     #Dijkstra's algorithms
     edges = []
@@ -728,14 +728,14 @@ def main():
     
     # card 31
     # the matrix Q
-    # deleted_row = [19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 
-    # 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 
-    # 58, 59, 60, 61, 62, 63, 64, 65, 77, 78, 132, 133, 17, 18, 12, 13, 14, 15, 16, 66, 11, 69, 
-    # 70, 71, 72, 73, 74, 75, 76, 79, 80, 81, 82, 67, 68, 9, 10, 115, 116, 123, 124, 102, 103, 104, 
-    # 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 117, 118, 119, 120, 121, 122, 125, 126, 127, 
-    # 128, 100, 101, 132, 133, 134, 135, 130, 131, 97]
-    # t_delete_column = np.delete(t_round, deleted_row, 1)
-    # t_delete_q = np.delete(t_delete_column, deleted_row, 0)
+    deleted_row = [19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 
+    38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 
+    60, 61, 62, 63, 64, 65, 77, 78, 132, 133, 17, 18, 12, 13, 14, 15, 16, 66, 11, 69, 70, 71, 
+    72, 73, 74, 75, 76, 79, 80, 81, 82, 67, 68, 9, 10, 115, 116, 123, 124, 102, 103, 104, 105, 
+    106, 107, 108, 109, 110, 111, 112, 113, 114, 117, 118, 119, 120, 121, 122, 125, 126, 127, 
+    128, 100, 101, 132, 133, 134, 135, 130, 131, 97]
+    t_delete_column = np.delete(t_round, deleted_row, 1)
+    t_delete_q = np.delete(t_delete_column, deleted_row, 0)
     
     # card 28
     # the matrix Q
@@ -769,9 +769,9 @@ def main():
     
     # card 18
     # the matrix Q
-    deleted_row = [80, 84, 66, 68, 69, 70, 71, 75, 76, 77]
-    t_delete_column = np.delete(t_round, deleted_row, 1) #drop the absorbing state
-    t_delete_q = np.delete(t_delete_column, deleted_row, 0) #drop the absorbing state
+    # deleted_row = [80, 84, 66, 68, 69, 70, 71, 75, 76, 77]
+    # t_delete_column = np.delete(t_round, deleted_row, 1) #drop the absorbing state
+    # t_delete_q = np.delete(t_delete_column, deleted_row, 0) #drop the absorbing state
 
     # card 13
     # the matrix Q
@@ -800,7 +800,7 @@ def main():
     # -----------------------------------------------------------
     # Calculate the matrix R for cards no losing absorbing states. 
     # -----------------------------------------------------------
-    deleted_column_for_R = []
+    deleted_column_for_R_winning = []
     matrix_R = []
     deleted_column_for_R_losing = []
 
@@ -809,6 +809,7 @@ def main():
     r_delete_row = np.delete(t_round, deleted_row, 0) #delete the absorbing columns
     deleted_column = (delete_column_q(num_column, deleted_row))
     r_delete_column = np.delete(r_delete_row, deleted_column, 1) #delete the nonabsorbing rows
+    print(f"The deleted column for card {board_num} is {deleted_column}");
     print(f"The matrix that resembles matrix R but the losing absorbing states are not summed up yet of card {board_num} is \n{r_delete_column}")
 
     # get the column of the losing absorbing states and sum all column of losing absorbing states
@@ -816,9 +817,9 @@ def main():
     if (board_num == 18):
         num_winning_states = 8
     for i in range(len(deleted_row)-num_winning_states, len(deleted_row)):
-        deleted_column_for_R_losing.append(i)
+        deleted_column_for_R_losing.append(i) #get the winning columns
+    print(f"The winning column index for card {board_num} is {deleted_column_for_R_losing}")
     r_delete_column_for_losing = np.delete(r_delete_column, deleted_column_for_R_losing, 1)
-    print(f"deleted_column_for_R_losing for card {board_num} is {deleted_column_for_R_losing}")
     # print(f"r_delete_column_for_losing is \n{r_delete_column_for_losing}")
     r_sum_for_losing=np.sum(r_delete_column_for_losing,axis=1)  
     r_sum_for_losing_transpose=r_sum_for_losing.reshape((-1,1)) #tranpose because r_sum_for_losing is horizontal
@@ -826,10 +827,10 @@ def main():
 
     # get the column of the winning absorbing states
     for i in range(len(deleted_row)-num_winning_states):
-        deleted_column_for_R.append(i)
-    r_delete_column_for_winning = np.delete(r_delete_column, deleted_column_for_R, 1)
-    print(f"deleted_column_for_R is {deleted_column_for_R}")
-    print(f"t_delete_column_for_winning of card {board_num} is \n{r_delete_column_for_winning}")
+        deleted_column_for_R_winning.append(i)
+    r_delete_column_for_winning = np.delete(r_delete_column, deleted_column_for_R_winning, 1)
+    print(f"The losing column indices of card {board_num} are {deleted_column_for_R_winning}")
+    print(f"The winning column for card {board_num} is \n{r_delete_column_for_winning}")
 
     # append the losing and winning states together
     matrix_R = np.append(r_sum_for_losing_transpose, r_delete_column_for_winning, 1)    
@@ -862,7 +863,7 @@ def main():
     # state. B = F.R
     # -----------------------------------------------------------
     """B = F.R"""
-    B = np.matmul(f_round, r_delete_column)
+    B = np.matmul(f_round, matrix_R)
     print(f"The matrix B of card {board_num} is \n {B}")
 
     # # to check whether the new edge is added
