@@ -806,7 +806,7 @@ def main():
     # matrix_Q = np.delete(matrix_Q_columns_deleted, absorbing_rows_cols_to_delete, 0)
 
     # -----------------------------------------------------------
-    # Calculate the matrix R for cards no losing absorbing states. 
+    # Calculate the matrix R for cards with losing absorbing states.
     # -----------------------------------------------------------
     losing_indices = []
     matrix_R = []
@@ -848,7 +848,7 @@ def main():
     matrix_R = np.append(sum_losing_cols_to_get_R_transpose, winning_cols_to_get_R, 1)
 
     # -----------------------------------------------------------
-    # Calculate the fundamental matrix for cards no losing absorbing states
+    # Calculate the fundamental matrix for cards
     # -----------------------------------------------------------
     print(f"The matrix after dropping absorbing states of card {board_num} is: \n{matrix_Q}")
     print(f"The matrix R of card {board_num} is \n{matrix_R}")
